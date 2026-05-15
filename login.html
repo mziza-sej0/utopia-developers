@@ -7,12 +7,13 @@
   <title>Login — Utopia Developers</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <body class="login-page">
   <div class="login-wrapper">
     <div class="login-container">
       <!-- Logo Section -->
       <div class="login-header">
-        <a href="index.html" class="logo-link">
+        <a href="homepage.html" class="logo-link">
           <span class="brand-text">utopia developers</span>
         </a>
       </div>
@@ -75,6 +76,7 @@
         <div class="social-auth">
           <button class="social-btn" data-provider="google">
             <span>Google</span>
+            
           </button>
           <button class="social-btn" data-provider="github">
             <span>GitHub</span>
@@ -458,10 +460,58 @@
       if (user) {
         showStatus('loginStatus', `Already logged in as ${user.name}. Redirecting...`, 'success');
         setTimeout(() => {
-          window.location.href = 'index.html';
+          window.location.href = 'homepage.html';
         }, 1500);
       }
     }
+window.onload = function () {
+  // Initialize Google Identity Services
+  google.accounts.id.initialize({
+    client_id: "YOUR_GOOGLE_CLIENT_ID_HERE.apps.googleusercontent.com", // Replace this!
+    callback: handleGoogleCredentialResponse
+  });
+
+  // Render the button inside our container
+  google.accounts.id.renderButton(
+    document.getElementById("google-button-container"),
+    { theme: "outline", size: "large", width: "100%" } // Customize the look
+  );
+};
+
+// This function runs automatically when the user successfully clicks the Google button
+async function handleGoogleCredentialResponse(response) {
+  const status = document.getElementById('loginStatus');
+  status.textContent = 'Verifying with Google...';
+  status.className = 'form-status loading';
+
+  try {
+    // Send the Google token to our Node.js backend
+    const res = await fetch('http://localhost:5000/api/auth/google', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: response.credential })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      status.textContent = 'Google login successful!';
+      status.className = 'form-status success';
+      
+      // Save our custom JWT to localStorage
+      localStorage.setItem('utopia_token', data.token);
+      
+      // Redirect to homepage
+      setTimeout(() => window.location.href = 'homepage.html', 1000);
+    } else {
+      status.textContent = data.message || 'Google Auth failed on server.';
+      status.className = 'form-status error';
+    }
+  } catch (error) {
+    status.textContent = 'Network error during Google Auth.';
+    status.className = 'form-status error';
+  }
+}
   </script>
 </body>
 </html>
