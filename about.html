@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About — Utopia Developers</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-content">
+      <a class="logo-link" href="homepage.html">
+        <span class="brand-text">utopia developers</span>
+      </a>
+      <nav class="nav-primary" aria-label="Main navigation">
+        <a href="homepage.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="projects.html">Projects</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero / Intro -->
+    <section class="hero">
+      <div class="container hero-content">
+        <div class="hero-text">
+          <h1>About Utopia Developers</h1>
+          <p class="hero-subtitle">We craft fast, accessible, and beautiful web experiences. Small team — big impact.</p>
+          <p class="muted">Our work spans product websites, progressive web apps, APIs and performance-first frontend engineering.</p>
+        </div>
+        <div class="hero-image">
+          <img src="iMAGES/utopia.jpg" alt="Utopia Developers team illustration" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Mission & Values -->
+    <section class="services-section">
+      <div class="container">
+        <h2>Our Mission</h2>
+        <p class="lead">To help teams deliver delightful web experiences that scale. We believe in clear code, measurable outcomes, and inclusive design.</p>
+
+        <div class="services-grid" style="margin-top:1.25rem">
+          <div class="service-card">
+            <div class="service-icon">🎯</div>
+            <h3>Outcome Driven</h3>
+            <p>We focus on business impact: conversion, retention and user happiness — not just features.</p>
+          </div>
+          <div class="service-card">
+            <div class="service-icon">♿</div>
+            <h3>Accessible by Design</h3>
+            <p>Accessibility is a first-class concern. We build inclusive interfaces that work for everyone.</p>
+          </div>
+          <div class="service-card">
+            <div class="service-icon">🔒</div>
+            <h3>Secure & Reliable</h3>
+            <p>Security and performance are integrated into our development lifecycle from day one.</p>
+          </div>
+          <div class="service-card">
+            <div class="service-icon">🤝</div>
+            <h3>Collaborative</h3>
+            <p>We partner with product teams and designers to deliver production-ready solutions.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Timeline / History -->
+    <section class="tech-stack-section">
+      <div class="container">
+        <h2>Our Story</h2>
+        <p class="muted">Founded by a small group of engineers and designers, Utopia Developers grew from freelance roots into a focused agency delivering web products for startups and SMBs.</p>
+
+        <div style="margin-top:1rem">
+          <ul class="contact-list">
+            <li><strong>2018:</strong> Company founded — first projects in marketing sites and prototypes.</li>
+            <li><strong>2020:</strong> Expanded to full-stack applications and APIs.</li>
+            <li><strong>2022:</strong> Focus on performance, accessibility and long-term maintenance.</li>
+            <li><strong>2024:</strong> Remote-first team delivering across timezones.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Team -->
+    <section class="featured-section">
+      <div class="container">
+        <h2>Meet The Team</h2>
+        <div class="projects-preview">
+          <article class="project-preview">
+            <div class="preview-image">
+              <img src="iMAGES/team1.png" alt="Lead Developer" loading="lazy" />
+            </div>
+            <h3>joseph mongi- lead developer</h3>
+            <p class="muted">Front-end, performance optimizations and architecture.</p>
+          </article>
+          <article class="project-preview">
+            <div class="preview-image">
+              <img src="iMAGES/team2.png" alt="Product Designer" loading="lazy" />
+            </div>
+            <h3>Marco Silva — Product Designer</h3>
+            <p class="muted">Design systems, UX research and accessible UI.</p>
+          </article>
+          <article class="project-preview">
+            <div class="preview-image">
+              <img src="iMAGES/team3.png" alt="Backend Engineer" loading="lazy" />
+            </div>
+            <h3>Priya Patel — Backend Engineer</h3>
+            <p class="muted">APIs, databases and cloud infrastructure.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Call to action -->
+    <section class="cta-section">
+      <div class="container cta-content">
+        <h2>Work With Us</h2>
+        <p class="muted">If you'd like to build something together, view our projects or get in touch for a free consultation.</p>
+        <div style="margin-top:1rem">
+          <a href="projects.html" class="btn btn-primary">View Projects</a>
+          <a href="contact.html" class="btn btn-secondary">Contact Us</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-section">
+        <h4>utopia developers</h4>
+        <p>Building web solutions with passion and precision.</p>
+      </div>
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="homepage.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="projects.html">Projects</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Follow Us</h4>
+        <div class="social-links">
+          <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://github.com" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://twitter.com" target="_blank" rel="noopener">Twitter</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; <span id="year"></span> utopia developers. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

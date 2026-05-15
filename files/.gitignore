@@ -1,0 +1,48 @@
+# ─── Environment & Secrets ──────────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+.env.production
+
+# ─── Node.js / npm ──────────────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# ─── Database ──────────────────────────────────────────────────────────────
+*.db
+*.sqlite
+*.sqlite3
+mongo/
+postgres/
+.mongodb/
+
+# ─── Logs ──────────────────────────────────────────────────────────────────
+logs/
+*.log
+lerna-debug.log*
+
+# ─── Testing ────────────────────────────────────────────────────────────────
+coverage/
+.nyc_output/
+test-results/
+
+# ─── Uploads & Temp ────────────────────────────────────────────────────────
+uploads/
+temp/
+tmp/
+*.tmp
+
+# ─── Email Test ────────────────────────────────────────────────────────────
+ethereal-account.json
+
+# ─── OS & Editor ────────────────────────────────────────────────────────────
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*~

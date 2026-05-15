@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Contact Utopia Developers for web development services. Get a free consultation for your next project." />
+  <title>Contact — Utopia Developers</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-content">
+      <a class="logo-link" href="index.html">
+        <span class="brand-text">utopia developers</span>
+      </a>
+      <nav class="nav-primary" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="projects.html">Projects</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero contact-hero">
+      <div class="container hero-content">
+        <div class="hero-text">
+          <h1>Get In Touch</h1>
+          <p class="hero-subtitle">Questions, project inquiries or just want to say hi — we'd love to hear from you.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact-section">
+      <div class="container contact-grid">
+        <div class="contact-card contact-info">
+          <h2>Contact Information</h2>
+          <p class="muted">We aim to respond within 1-2 business days.</p>
+          <ul class="contact-list">
+            <li><strong>Email:</strong> <a href="mailto:services@utopiadevelopers.com">services@utopiadevelopers.com</a></li>
+            <li><strong>Phone:</strong> <a href="tel:+254743325039">(+254) 743 325 039</a></li>
+            <li><strong>Location:</strong> Remote — available worldwide</li>
+          </ul>
+
+          <div class="social-compact">
+            <a href="https://facebook.com/joseph%20mongi" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+              <img src="iMAGES/facebook-icon.jpeg" alt="" width="30" height="30" loading="lazy" />
+            </a>
+            <a href="https://twitter.com/utopia%20developers" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+              <img src="iMAGES/Twitter-icon.jpeg" alt="" width="30" height="30" loading="lazy" />
+            </a>
+            <a href="https://linkedin.com/company/joseph-mongi" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+              <img src="iMAGES/LinkedIn-icon.jpeg" alt="" width="30" height="30" loading="lazy" />
+            </a>
+            <a href="https://instagram.com/utopia%20developers" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <img src="iMAGES/Instagram-icon.jpeg" alt="" width="30" height="30" loading="lazy" />
+            </a>
+            <a href="https://github.com/mziza-sej0" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+              <img src="iMAGES/GitHub.jpeg" alt="" width="30" height="30" loading="lazy" />
+            </a>
+          </div>
+        </div>
+
+        <div class="contact-card contact-form-card">
+          <h2>Send a Message</h2>
+          <form id="contactForm" novalidate>
+            <div class="form-row">
+              <label for="name">Name *</label>
+              <input id="name" name="name" type="text" placeholder="Your full name" required />
+            </div>
+
+            <div class="form-row">
+              <label for="email">Email *</label>
+              <input id="email" name="email" type="email" placeholder="you@example.com" required />
+            </div>
+
+            <div class="form-row">
+              <label for="subject">Subject</label>
+              <input id="subject" name="subject" type="text" placeholder="Project or question" />
+            </div>
+
+            <div class="form-row">
+              <label for="message">Message *</label>
+              <textarea id="message" name="message" rows="6" placeholder="Tell us about your project or question" required></textarea>
+            </div>
+
+            <div class="form-row form-row-inline">
+              <label class="checkbox-label">
+                <input type="checkbox" id="subscribe" name="subscribe" /> Subscribe to occasional updates
+              </label>
+            </div>
+
+            <!-- Honeypot field (hidden) -->
+            <input type="text" name="_hp" style="display:none" tabindex="-1" autocomplete="off" />
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary" id="submitBtn">
+                <span class="btn-text">Send Message</span>
+                <span class="btn-loading" style="display:none;">Sending...</span>
+              </button>
+              <button type="button" id="clearBtn" class="btn btn-secondary">Clear</button>
+            </div>
+
+            <p id="formStatus" class="muted" aria-live="polite" style="margin-top:0.75rem"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-section">
+        <h4>utopia developers</h4>
+        <p>Building web solutions with passion and precision.</p>
+      </div>
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="projects.html">Projects</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Follow Us</h4>
+        <div class="social-links">
+          <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://github.com" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://twitter.com" target="_blank" rel="noopener">Twitter</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; <span id="year"></span> utopia developers. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script>
+    // Set current year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Contact form handling
+    (function() {
+      const form = document.getElementById('contactForm');
+      const status = document.getElementById('formStatus');
+      const submitBtn = document.getElementById('submitBtn');
+      const btnText = submitBtn.querySelector('.btn-text');
+      const btnLoading = submitBtn.querySelector('.btn-loading');
+      const clearBtn = document.getElementById('clearBtn');
+
+      function setLoading(loading) {
+        submitBtn.disabled = loading;
+        btnText.style.display = loading ? 'none' : 'inline';
+        btnLoading.style.display = loading ? 'inline' : 'none';
+      }
+
+      function showStatus(message, type = 'success') {
+        status.textContent = message;
+        status.className = type === 'error' ? 'error-msg' : 'success-msg';
+        status.style.color = type === 'error' ? '#ef4444' : '#22c55e';
+      }
+
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        status.textContent = '';
+
+        // Honeypot check
+        const hp = form.querySelector('input[name="_hp"]').value;
+        if (hp) {
+          showStatus('Submission blocked.', 'error');
+          return;
+        }
+
+        // Get form data
+        const formData = {
+          name: form.name.value.trim(),
+          email: form.email.value.trim(),
+          subject: form.subject.value.trim(),
+          message: form.message.value.trim(),
+          subscribe: form.subscribe.checked,
+        };
+
+        // Validation
+        if (!formData.name || !formData.email || !formData.message) {
+          showStatus('Please fill in all required fields.', 'error');
+          return;
+        }
+
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.email)) {
+          showStatus('Please enter a valid email address.', 'error');
+          return;
+        }
+
+        setLoading(true);
+
+        try {
+          const response = await window.UtopiaAPI.Contact.submit(formData);
+          showStatus(response.message, 'success');
+          form.reset();
+        } catch (error) {
+          showStatus(error.message || 'Something went wrong. Please try again.', 'error');
+        } finally {
+          setLoading(false);
+        }
+      });
+
+      clearBtn.addEventListener('click', function() {
+        form.reset();
+        status.textContent = '';
+      });
+    })();
+  </script>
+</body>
+</html>

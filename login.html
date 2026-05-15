@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Login to your Utopia Developers account" />
+  <title>Login — Utopia Developers</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="login-page">
+  <div class="login-wrapper">
+    <div class="login-container">
+      <!-- Logo Section -->
+      <div class="login-header">
+        <a href="index.html" class="logo-link">
+          <span class="brand-text">utopia developers</span>
+        </a>
+      </div>
+
+      <!-- Auth Tabs -->
+      <div class="auth-tabs">
+        <button class="tab-btn active" data-tab="login">Login</button>
+        <button class="tab-btn" data-tab="signup">Sign Up</button>
+      </div>
+
+      <!-- Login Form -->
+      <div id="login" class="auth-form active">
+        <h2>Welcome Back</h2>
+        <p class="form-subtitle">Sign in to your account to continue.</p>
+
+        <form id="loginForm" novalidate>
+          <div class="form-row">
+            <label for="login-email">Email</label>
+            <input 
+              id="login-email" 
+              name="email" 
+              type="email" 
+              placeholder="you@example.com" 
+              required 
+            />
+            <span class="error-msg" role="alert"></span>
+          </div>
+
+          <div class="form-row">
+            <label for="login-password">Password</label>
+            <div class="password-wrapper">
+              <input 
+                id="login-password" 
+                name="password" 
+                type="password" 
+                placeholder="••••••••" 
+                required 
+              />
+              <button type="button" class="toggle-password" aria-label="Toggle password visibility">👁️</button>
+            </div>
+            <span class="error-msg" role="alert"></span>
+          </div>
+
+          <div class="form-row checkbox">
+            <label class="checkbox-label">
+              <input type="checkbox" name="remember" /> Remember me
+            </label>
+            <a href="#" class="forgot-password" id="forgotPasswordLink">Forgot password?</a>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">
+            <span class="btn-text">Sign In</span>
+            <span class="btn-loading" style="display:none;">Signing in...</span>
+          </button>
+          <p class="form-status" id="loginStatus" aria-live="polite"></p>
+        </form>
+
+        <div class="divider">or</div>
+
+        <div class="social-auth">
+          <button class="social-btn" data-provider="google">
+            <span>Google</span>
+          </button>
+          <button class="social-btn" data-provider="github">
+            <span>GitHub</span>
+          </button>
+        </div>
+
+        <p class="auth-footer">Don't have an account? <button type="button" class="link-btn" data-switch="signup">Create one</button></p>
+      </div>
+
+      <!-- Sign Up Form -->
+      <div id="signup" class="auth-form">
+        <h2>Create Your Account</h2>
+        <p class="form-subtitle">Join Utopia Developers today.</p>
+
+        <form id="signupForm" novalidate>
+          <div class="form-row">
+            <label for="signup-name">Full Name</label>
+            <input 
+              id="signup-name" 
+              name="name" 
+              type="text" 
+              placeholder="John Doe" 
+              required 
+            />
+            <span class="error-msg" role="alert"></span>
+          </div>
+
+          <div class="form-row">
+            <label for="signup-email">Email</label>
+            <input 
+              id="signup-email" 
+              name="email" 
+              type="email" 
+              placeholder="you@example.com" 
+              required 
+            />
+            <span class="error-msg" role="alert"></span>
+          </div>
+
+          <div class="form-row">
+            <label for="signup-password">Password</label>
+            <div class="password-wrapper">
+              <input 
+                id="signup-password" 
+                name="password" 
+                type="password" 
+                placeholder="••••••••" 
+                required 
+              />
+              <button type="button" class="toggle-password" aria-label="Toggle password visibility">👁️</button>
+            </div>
+            <span class="error-msg" role="alert"></span>
+            <div class="password-strength">
+              <div class="strength-bar" id="strengthBar"></div>
+              <span class="strength-text" id="strengthText"></span>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label for="signup-confirm">Confirm Password</label>
+            <div class="password-wrapper">
+              <input 
+                id="signup-confirm" 
+                name="confirm" 
+                type="password" 
+                placeholder="••••••••" 
+                required 
+              />
+              <button type="button" class="toggle-password" aria-label="Toggle password visibility">👁️</button>
+            </div>
+            <span class="error-msg" role="alert"></span>
+          </div>
+
+          <div class="form-row checkbox">
+            <label class="checkbox-label">
+              <input type="checkbox" name="terms" required /> I agree to the <a href="#">Terms & Conditions</a>
+            </label>
+            <span class="error-msg" role="alert"></span>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">
+            <span class="btn-text">Create Account</span>
+            <span class="btn-loading" style="display:none;">Creating...</span>
+          </button>
+          <p class="form-status" id="signupStatus" aria-live="polite"></p>
+        </form>
+
+        <p class="auth-footer">Already have an account? <button type="button" class="link-btn" data-switch="login">Sign in</button></p>
+      </div>
+
+      <!-- Forgot Password Form -->
+      <div id="forgot" class="auth-form">
+        <h2>Reset Password</h2>
+        <p class="form-subtitle">Enter your email to receive reset instructions.</p>
+
+        <form id="forgotForm" novalidate>
+          <div class="form-row">
+            <label for="forgot-email">Email</label>
+            <input 
+              id="forgot-email" 
+              name="email" 
+              type="email" 
+              placeholder="you@example.com" 
+              required 
+            />
+            <span class="error-msg" role="alert"></span>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">
+            <span class="btn-text">Send Reset Link</span>
+            <span class="btn-loading" style="display:none;">Sending...</span>
+          </button>
+          <p class="form-status" id="forgotStatus" aria-live="polite"></p>
+        </form>
+
+        <p class="auth-footer"><button type="button" class="link-btn" data-switch="login">Back to login</button></p>
+      </div>
+    </div>
+
+    <!-- Right Side Decoration -->
+    <div class="login-decoration">
+      <div class="decoration-content">
+        <h3>Secure & Fast</h3>
+        <p>Industry-standard security with seamless authentication.</p>
+        <div class="decoration-features">
+          <div class="feature-item">✓ JWT Authentication</div>
+          <div class="feature-item">✓ OAuth Integration</div>
+          <div class="feature-item">✓ Encrypted Passwords</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script>
+    // Tab switching
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tabName = btn.dataset.tab;
+        switchTab(tabName);
+      });
+    });
+
+    // Form tab switching via button
+    document.querySelectorAll('.link-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        switchTab(btn.dataset.switch);
+      });
+    });
+
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+      
+      const tabBtn = document.querySelector(`[data-tab="${tabName}"]`);
+      if (tabBtn) tabBtn.classList.add('active');
+      
+      const tabForm = document.getElementById(tabName);
+      if (tabForm) tabForm.classList.add('active');
+    }
+
+    // Password visibility toggle
+    document.querySelectorAll('.toggle-password').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const input = btn.parentElement.querySelector('input');
+        const isPassword = input.type === 'password';
+        input.type = isPassword ? 'text' : 'password';
+        btn.textContent = isPassword ? '🙈' : '👁️';
+      });
+    });
+
+    // Password strength indicator
+    const passwordInput = document.getElementById('signup-password');
+    const strengthBar = document.getElementById('strengthBar');
+    const strengthText = document.getElementById('strengthText');
+
+    if (passwordInput) {
+      passwordInput.addEventListener('input', () => {
+        const pwd = passwordInput.value;
+        let strength = 0;
+        const regex = {
+          lower: /[a-z]/,
+          upper: /[A-Z]/,
+          number: /\d/,
+          special: /[!@#$%^&*]/
+        };
+
+        if (pwd.length >= 8) strength++;
+        if (pwd.length >= 12) strength++;
+        if (regex.lower.test(pwd) && regex.upper.test(pwd)) strength++;
+        if (regex.number.test(pwd)) strength++;
+        if (regex.special.test(pwd)) strength++;
+
+        const strengthLevels = ['', 'Weak', 'Fair', 'Good', 'Strong', 'Very Strong'];
+        const strengthColors = ['', '#ef4444', '#f97316', '#eab308', '#84cc16', '#22c55e'];
+
+        strengthBar.style.width = (strength * 20) + '%';
+        strengthBar.style.backgroundColor = strengthColors[strength];
+        strengthText.textContent = strengthLevels[strength];
+        strengthText.style.color = strengthColors[strength];
+      });
+    }
+
+    // Form validation helpers
+    function validateEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function showFieldError(input, message) {
+      const errorMsg = input.closest('.form-row').querySelector('.error-msg');
+      input.classList.add('error');
+      if (errorMsg) errorMsg.textContent = message;
+    }
+
+    function clearFieldError(input) {
+      const errorMsg = input.closest('.form-row').querySelector('.error-msg');
+      input.classList.remove('error');
+      if (errorMsg) errorMsg.textContent = '';
+    }
+
+    function setLoading(form, loading) {
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const btnText = submitBtn.querySelector('.btn-text');
+      const btnLoading = submitBtn.querySelector('.btn-loading');
+      submitBtn.disabled = loading;
+      btnText.style.display = loading ? 'none' : 'inline';
+      btnLoading.style.display = loading ? 'inline' : 'none';
+    }
+
+    function showStatus(elementId, message, type = 'success') {
+      const status = document.getElementById(elementId);
+      status.textContent = message;
+      status.className = `form-status ${type}`;
+    }
+
+    // Login form
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const email = form.email.value.trim();
+      const password = form.password.value;
+      const remember = form.remember.checked;
+
+      // Clear previous errors
+      clearFieldError(form.email);
+      clearFieldError(form.password);
+
+      // Validation
+      let isValid = true;
+      if (!validateEmail(email)) {
+        showFieldError(form.email, 'Please enter a valid email');
+        isValid = false;
+      }
+      if (!password) {
+        showFieldError(form.password, 'Password is required');
+        isValid = false;
+      }
+
+      if (!isValid) return;
+
+      setLoading(form, true);
+      showStatus('loginStatus', '');
+
+      try {
+        const response = await window.UtopiaAPI.Auth.login(email, password, remember);
+        showStatus('loginStatus', `Welcome back, ${response.user.name}!`, 'success');
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 1000);
+      } catch (error) {
+        showStatus('loginStatus', error.message, 'error');
+      } finally {
+        setLoading(form, false);
+      }
+    });
+
+    // Signup form
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const name = form.name.value.trim();
+      const email = form.email.value.trim();
+      const password = form.password.value;
+      const confirm = form.confirm.value;
+      const terms = form.terms.checked;
+
+      // Clear errors
+      ['name', 'email', 'password', 'confirm', 'terms'].forEach(field => {
+        const input = form[field];
+        if (input) clearFieldError(input);
+      });
+
+      // Validation
+      let isValid = true;
+      if (!name) {
+        showFieldError(form.name, 'Name is required');
+        isValid = false;
+      }
+      if (!validateEmail(email)) {
+        showFieldError(form.email, 'Please enter a valid email');
+        isValid = false;
+      }
+      if (password.length < 8) {
+        showFieldError(form.password, 'Password must be at least 8 characters');
+        isValid = false;
+      }
+      if (password !== confirm) {
+        showFieldError(form.confirm, 'Passwords do not match');
+        isValid = false;
+      }
+      if (!terms) {
+        showFieldError(form.terms, 'You must agree to the terms');
+        isValid = false;
+      }
+
+      if (!isValid) return;
+
+      setLoading(form, true);
+      showStatus('signupStatus', '');
+
+      try {
+        const response = await window.UtopiaAPI.Auth.register(name, email, password);
+        showStatus('signupStatus', 'Account created successfully!', 'success');
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 1000);
+      } catch (error) {
+        showStatus('signupStatus', error.message, 'error');
+      } finally {
+        setLoading(form, false);
+      }
+    });
+
+    // Forgot password link
+    document.getElementById('forgotPasswordLink').addEventListener('click', (e) => {
+      e.preventDefault();
+      switchTab('forgot');
+    });
+
+    // Forgot password form
+    document.getElementById('forgotForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const email = form.email.value.trim();
+
+      clearFieldError(form.email);
+
+      if (!validateEmail(email)) {
+        showFieldError(form.email, 'Please enter a valid email');
+        return;
+      }
+
+      setLoading(form, true);
+      showStatus('forgotStatus', '');
+
+      try {
+        const response = await window.UtopiaAPI.Auth.forgotPassword(email);
+        showStatus('forgotStatus', response.message, 'success');
+        form.reset();
+      } catch (error) {
+        showStatus('forgotStatus', error.message, 'error');
+      } finally {
+        setLoading(form, false);
+      }
+    });
+
+    // Social auth buttons
+    document.querySelectorAll('.social-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const provider = btn.dataset.provider;
+        window.UtopiaAPI.showNotification(`${provider} OAuth integration coming soon!`, 'info');
+      });
+    });
+
+    // Check if already logged in
+    if (window.UtopiaAPI.Auth.isLoggedIn()) {
+      const user = window.UtopiaAPI.Auth.getCurrentUser();
+      if (user) {
+        showStatus('loginStatus', `Already logged in as ${user.name}. Redirecting...`, 'success');
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 1500);
+      }
+    }
+  </script>
+</body>
+</html>

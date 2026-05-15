@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Projects — Utopia Developers</title>
+    <link rel="stylesheet" href="projects.css" />
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="brand" href="homepage.html">utopia developers</a>
+            <nav class="main-nav" aria-label="Main navigation">
+                <a href="homepage.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="page-intro">
+            <h1>Selected Projects</h1>
+            <p class="lead">A curated showcase of recent web development work — responsive sites, web apps, and experiments. Click a project for details or use the filters to narrow by technology.</p>
+        </section>
+
+        <section class="controls">
+            <div class="filter-group" role="toolbar" aria-label="Filter projects">
+                <button class="filter-btn active" data-filter="*">All</button>
+                <button class="filter-btn" data-filter="frontend">Frontend</button>
+                <button class="filter-btn" data-filter="backend">Backend</button>
+                <button class="filter-btn" data-filter="fullstack">Fullstack</button>
+                <button class="filter-btn" data-filter="uiux">UI/UX</button>
+            </div>
+            <div class="search">
+                <label for="project-search" class="visually-hidden">Search projects</label>
+                <input id="project-search" type="search" placeholder="Search projects or tech (e.g. React, Node)" />
+            </div>
+        </section>
+
+        <section class="projects-grid" id="projectsGrid">
+            <!-- Example project card: duplicate/modify as needed -->
+            <article class="project-card" data-tags="frontend react uiux">
+                <div class="thumb">
+                    <img src="iMAGES/project1.png" alt="Project 1 screenshot" loading="lazy" />
+                </div>
+                <div class="card-body">
+                    <h3 class="project-title">Portfolio site — React</h3>
+                    <p class="project-desc">A responsive portfolio built with React and CSS Grid. Includes smooth scrolling, accessible components, and optimized images.</p>
+                    <ul class="tech-list">
+                        <li>React</li>
+                        <li>CSS Grid</li>
+                        <li>Netlify</li>
+                    </ul>
+                    <div class="card-actions">
+                        <a class="btn" href="#" target="_blank" rel="noopener">Live</a>
+                        <a class="btn ghost" href="#" target="_blank" rel="noopener">Code</a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card" data-tags="fullstack node express">
+                <div class="thumb">
+                    <img src="iMAGES/project2.png" alt="Project 2 screenshot" loading="lazy" />
+                </div>
+                <div class="card-body">
+                    <h3 class="project-title">Task Manager API</h3>
+                    <p class="project-desc">RESTful API with authentication, rate-limiting and Redis caching. Built for reliability and easy integration with frontends.</p>
+                    <ul class="tech-list">
+                        <li>Node.js</li>
+                        <li>Express</li>
+                        <li>MongoDB</li>
+                    </ul>
+                    <div class="card-actions">
+                        <a class="btn" href="#" target="_blank" rel="noopener">API Docs</a>
+                        <a class="btn ghost" href="#" target="_blank" rel="noopener">Code</a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card" data-tags="frontend uiux html css">
+                <div class="thumb">
+                    <img src="iMAGES/project3.png" alt="Project 3 screenshot" loading="lazy" />
+                </div>
+                <div class="card-body">
+                    <h3 class="project-title">Marketing Landing Page</h3>
+                    <p class="project-desc">Fast, SEO-friendly landing page with A/B-ready components and pixel-perfect design handoff from Figma.</p>
+                    <ul class="tech-list">
+                        <li>HTML</li>
+                        <li>CSS</li>
+                        <li>Performance</li>
+                    </ul>
+                    <div class="card-actions">
+                        <a class="btn" href="#" target="_blank" rel="noopener">Live</a>
+                        <a class="btn ghost" href="#" target="_blank" rel="noopener">Design</a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card" data-tags="backend python flask">
+                <div class="thumb">
+                    <img src="iMAGES/project4.png" alt="Project 4 screenshot" loading="lazy" />
+                </div>
+                <div class="card-body">
+                    <h3 class="project-title">Analytics Dashboard</h3>
+                    <p class="project-desc">Backend service powering an analytics dashboard with aggregations, scheduled jobs, and CSV exports.</p>
+                    <ul class="tech-list">
+                        <li>Python</li>
+                        <li>Flask</li>
+                        <li>Postgres</li>
+                    </ul>
+                    <div class="card-actions">
+                        <a class="btn" href="#" target="_blank" rel="noopener">Demo</a>
+                        <a class="btn ghost" href="#" target="_blank" rel="noopener">Code</a>
+                    </div>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <small>&copy; <span id="year"></span> utopia developers — Built with care.</small>
+        </div>
+    </footer>
+
+    <script>
+        // Simple filter + search for the project grid
+        (function () {
+            const buttons = document.querySelectorAll('.filter-btn');
+            const grid = document.getElementById('projectsGrid');
+            const cards = Array.from(document.querySelectorAll('.project-card'));
+            const search = document.getElementById('project-search');
+
+            function applyFilter(filter) {
+                const query = (search.value || '').trim().toLowerCase();
+                cards.forEach(card => {
+                    const tags = card.getAttribute('data-tags') || '';
+                    const text = (card.innerText || '').toLowerCase();
+                    const matchesFilter = filter === '*' || tags.split(/\s+/).includes(filter);
+                    const matchesSearch = !query || text.indexOf(query) !== -1;
+                    card.style.display = (matchesFilter && matchesSearch) ? '' : 'none';
+                });
+            }
+
+            buttons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    buttons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    applyFilter(btn.dataset.filter);
+                });
+            });
+
+            search.addEventListener('input', () => {
+                const active = document.querySelector('.filter-btn.active');
+                const filter = active ? active.dataset.filter : '*';
+                applyFilter(filter);
+            });
+
+            // init
+            document.getElementById('year').textContent = new Date().getFullYear();
+        })();
+    </script>
+</body>
+</html>
