@@ -7,6 +7,7 @@ const rateLimit = require('express-rate-limit');
 const { connectDB } = require('./db');
 const authRoutes = require('./routes/auth');
 const contactRoutes = require('./routes/contact');
+const paymentRoutes = require('./routes/payment');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -57,6 +58,7 @@ app.use(generalLimiter);
 
 app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/contact', contactLimiter, contactRoutes);
+app.use('/api/payment', paymentRoutes);
 
 // ─── Health Check ────────────────────────────────────────────────────────────
 

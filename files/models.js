@@ -44,9 +44,28 @@ const contactMessageSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Payment Schema (for M-Pesa transactions)
+const paymentSchema = new mongoose.Schema(
+  {
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    email: { type: String, required: true },
+    phoneNumber: { type: String, required: true },
+    amount: { type: Number, required: true },
+    description: { type: String },
+    checkoutRequestId: { type: String, unique: true },
+    mpesaReceiptNumber: { type: String },
+    status: { type: String, enum: ['pending', 'completed', 'failed'], default: 'pending' },
+    resultCode: { type: String },
+    resultDescription: { type: String },
+    transactionDate: { type: Date },
+  },
+  { timestamps: true }
+);
+
 // Export models
 module.exports = {
   User: mongoose.model('User', userSchema),
   ResetToken: mongoose.model('ResetToken', resetTokenSchema),
   ContactMessage: mongoose.model('ContactMessage', contactMessageSchema),
+  Payment: mongoose.model('Payment', paymentSchema),
 };
