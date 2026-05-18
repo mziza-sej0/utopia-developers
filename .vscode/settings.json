@@ -1,0 +1,33 @@
+{
+  "json.schemas": [
+    {
+      "fileMatch": ["nodemon.json"],
+      "url": "https://json.schemastore.org/nodemon.json",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "watch": {
+            "type": "array",
+            "description": "Directories or files to watch"
+          },
+          "ignore": {
+            "type": "array",
+            "description": "Files or paths to ignore"
+          },
+          "ext": {
+            "type": "string",
+            "description": "File extensions to watch"
+          },
+          "exec": {
+            "type": "string",
+            "description": "Command to execute"
+          },
+          "delay": {
+            "type": "number",
+            "description": "Delay before restarting in milliseconds"
+          }
+        }
+      }
+    }
+  ]
+}

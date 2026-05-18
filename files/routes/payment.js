@@ -3,9 +3,9 @@
  * Handles payment initiation, callbacks, and status queries
  */
 
-const express = require('express');
-const router = express.Router();
-const safaricom = require('../safaricom');
+const { Router } = require('express');
+const router = Router();
+const { initiatePayment, queryTransactionStatus, sendB2CPayment, getAccountBalance } = require('../safaricom');
 const { ContactMessage } = require('../models');
 
 // ─── Initiate M-Pesa Payment ────────────────────────────────────────────────
@@ -32,7 +32,7 @@ router.post('/initiate', async (req, res) => {
       : `254${phoneNumber.slice(-9)}`;
 
     // Initiate payment
-    const result = await safaricom.initiatePayment({
+    const result = await initiatePayment({
       phoneNumber: formattedPhone,
       amount,
       accountReference: reference || 'UTOPIA-SERVICE',
@@ -118,7 +118,7 @@ router.get('/status/:checkoutRequestId', async (req, res) => {
   try {
     const { checkoutRequestId } = req.params;
 
-    const result = await safaricom.queryTransactionStatus(checkoutRequestId);
+    const result = await queryTransactionStatus(checkoutRequestId);
 
     res.json({
       success: result.success,
@@ -162,7 +162,7 @@ router.post('/payout', async (req, res) => {
       ? phoneNumber
       : `254${phoneNumber.slice(-9)}`;
 
-    const result = await safaricom.sendB2CPayment({
+    const result = await sendB2CPayment({
       phoneNumber: formattedPhone,
       amount,
       description: description || 'Payout from Utopia Developers',
@@ -191,7 +191,7 @@ router.post('/payout', async (req, res) => {
 router.get('/balance', async (req, res) => {
   try {
     // TODO: Add admin authentication
-    const result = await safaricom.getAccountBalance();
+    const result = await getAccountBalance();
 
     res.json({
       success: result.success,

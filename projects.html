@@ -5,163 +5,186 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Projects — Utopia Developers</title>
     <link rel="stylesheet" href="projects.css" />
+    <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <header class="site-header">
-        <div class="container header-inner">
-            <a class="brand" href="homepage.html">utopia developers</a>
-            <nav class="main-nav" aria-label="Main navigation">
-                <a href="homepage.html">Home</a>
-                <a href="about.html">About</a>
-                <a href="projects.html">Projects</a>
-                <a href="contact.html">Contact</a>
-                <a href="payment.html">Payment</a>
-            </nav>
+  <header class="site-header">
+    <div class="container header-content">
+      <a class="logo-link" href="homepage.html">
+        <span class="brand-text">utopia developers</span>
+      </a>
+      <nav class="nav-primary" aria-label="Main navigation">
+        <a href="homepage.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="projects.html">Projects</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero contact-hero">
+      <div class="container hero-content">
+        <div class="hero-text">
+          <h1>Our Projects</h1>
+          <p class="hero-subtitle">Explore our portfolio of innovative web solutions and digital experiences.</p>
         </div>
-    </header>
+      </div>
+    </section>
 
-    <main class="container">
-        <section class="page-intro">
-            <h1>Selected Projects</h1>
-            <p class="lead">A curated showcase of recent web development work — responsive sites, web apps, and experiments. Click a project for details or use the filters to narrow by technology.</p>
-        </section>
-
-        <section class="controls">
-            <div class="filter-group" role="toolbar" aria-label="Filter projects">
-                <button class="filter-btn active" data-filter="*">All</button>
-                <button class="filter-btn" data-filter="frontend">Frontend</button>
-                <button class="filter-btn" data-filter="backend">Backend</button>
-                <button class="filter-btn" data-filter="fullstack">Fullstack</button>
-                <button class="filter-btn" data-filter="uiux">UI/UX</button>
-            </div>
-            <div class="search">
-                <label for="project-search" class="visually-hidden">Search projects</label>
-                <input id="project-search" type="search" placeholder="Search projects or tech (e.g. React, Node)" />
-            </div>
-        </section>
-
-        <section class="projects-grid" id="projectsGrid">
-            <!-- Example project card: duplicate/modify as needed -->
-            <article class="project-card" data-tags="frontend react uiux">
-                <div class="thumb">
-                    <img src="iMAGES/project1.png" alt="Project 1 screenshot" loading="lazy" />
-                </div>
-                <div class="card-body">
-                    <h3 class="project-title">Portfolio site — React</h3>
-                    <p class="project-desc">A responsive portfolio built with React and CSS Grid. Includes smooth scrolling, accessible components, and optimized images.</p>
-                    <ul class="tech-list">
-                        <li>React</li>
-                        <li>CSS Grid</li>
-                        <li>Netlify</li>
-                    </ul>
-                    <div class="card-actions">
-                        <a class="btn" href="#" target="_blank" rel="noopener">Live</a>
-                        <a class="btn ghost" href="#" target="_blank" rel="noopener">Code</a>
-                    </div>
-                </div>
-            </article>
-
-            <article class="project-card" data-tags="fullstack node express">
-                <div class="thumb">
-                    <img src="iMAGES/project2.png" alt="Project 2 screenshot" loading="lazy" />
-                </div>
-                <div class="card-body">
-                    <h3 class="project-title">Task Manager API</h3>
-                    <p class="project-desc">RESTful API with authentication, rate-limiting and Redis caching. Built for reliability and easy integration with frontends.</p>
-                    <ul class="tech-list">
-                        <li>Node.js</li>
-                        <li>Express</li>
-                        <li>MongoDB</li>
-                    </ul>
-                    <div class="card-actions">
-                        <a class="btn" href="#" target="_blank" rel="noopener">API Docs</a>
-                        <a class="btn ghost" href="#" target="_blank" rel="noopener">Code</a>
-                    </div>
-                </div>
-            </article>
-
-            <article class="project-card" data-tags="frontend uiux html css">
-                <div class="thumb">
-                    <img src="iMAGES/project3.png" alt="Project 3 screenshot" loading="lazy" />
-                </div>
-                <div class="card-body">
-                    <h3 class="project-title">Marketing Landing Page</h3>
-                    <p class="project-desc">Fast, SEO-friendly landing page with A/B-ready components and pixel-perfect design handoff from Figma.</p>
-                    <ul class="tech-list">
-                        <li>HTML</li>
-                        <li>CSS</li>
-                        <li>Performance</li>
-                    </ul>
-                    <div class="card-actions">
-                        <a class="btn" href="#" target="_blank" rel="noopener">Live</a>
-                        <a class="btn ghost" href="#" target="_blank" rel="noopener">Design</a>
-                    </div>
-                </div>
-            </article>
-
-            <article class="project-card" data-tags="backend python flask">
-                <div class="thumb">
-                    <img src="iMAGES/project4.png" alt="Project 4 screenshot" loading="lazy" />
-                </div>
-                <div class="card-body">
-                    <h3 class="project-title">Analytics Dashboard</h3>
-                    <p class="project-desc">Backend service powering an analytics dashboard with aggregations, scheduled jobs, and CSV exports.</p>
-                    <ul class="tech-list">
-                        <li>Python</li>
-                        <li>Flask</li>
-                        <li>Postgres</li>
-                    </ul>
-                    <div class="card-actions">
-                        <a class="btn" href="#" target="_blank" rel="noopener">Demo</a>
-                        <a class="btn ghost" href="#" target="_blank" rel="noopener">Code</a>
-                    </div>
-                </div>
-            </article>
-        </section>
-    </main>
-
-    <footer class="site-footer">
-        <div class="container">
-            <small>&copy; <span id="year"></span> utopia developers — Built with care.</small>
+    <section class="projects-section">
+      <div class="container">
+        <!-- Filter and Search Controls -->
+        <div class="controls">
+          <div class="filter-group">
+            <button class="filter-btn active" data-filter="*">All</button>
+            <button class="filter-btn" data-filter="frontend">Frontend</button>
+            <button class="filter-btn" data-filter="backend">Backend</button>
+            <button class="filter-btn" data-filter="fullstack">Fullstack</button>
+            <button class="filter-btn" data-filter="uiux">UI/UX</button>
+          </div>
+          <input type="text" id="project-search" class="search-input" placeholder="Search projects..." />
         </div>
-    </footer>
 
-    <script>
-        // Simple filter + search for the project grid
-        (function () {
-            const buttons = document.querySelectorAll('.filter-btn');
-            const grid = document.getElementById('projectsGrid');
-            const cards = Array.from(document.querySelectorAll('.project-card'));
-            const search = document.getElementById('project-search');
+        <!-- Projects Grid -->
+        <div class="projects-grid" id="projectsGrid">
+          <article class="project-card" data-tags="fullstack">
+            <div class="card-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+            <div class="card-content">
+              <h3>Portfolio React App</h3>
+              <p>A modern, responsive portfolio website built with React and deployed on Vercel.</p>
+              <div class="tech-tags">
+                <span>React</span>
+                <span>CSS</span>
+                <span>JavaScript</span>
+              </div>
+              <div class="card-actions">
+                <a href="#" class="btn-secondary">Live</a>
+                <a href="#" class="btn-secondary">Code</a>
+              </div>
+            </div>
+          </article>
 
-            function applyFilter(filter) {
-                const query = (search.value || '').trim().toLowerCase();
-                cards.forEach(card => {
-                    const tags = card.getAttribute('data-tags') || '';
-                    const text = (card.innerText || '').toLowerCase();
-                    const matchesFilter = filter === '*' || tags.split(/\s+/).includes(filter);
-                    const matchesSearch = !query || text.indexOf(query) !== -1;
-                    card.style.display = (matchesFilter && matchesSearch) ? '' : 'none';
-                });
-            }
+          <article class="project-card" data-tags="backend">
+            <div class="card-image" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+            <div class="card-content">
+              <h3>Task Manager API</h3>
+              <p>RESTful API built with Node.js and MongoDB for task management application.</p>
+              <div class="tech-tags">
+                <span>Node.js</span>
+                <span>MongoDB</span>
+                <span>Express</span>
+              </div>
+              <div class="card-actions">
+                <a href="#" class="btn-secondary">Live</a>
+                <a href="#" class="btn-secondary">Code</a>
+              </div>
+            </div>
+          </article>
 
-            buttons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    buttons.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    applyFilter(btn.dataset.filter);
-                });
-            });
+          <article class="project-card" data-tags="frontend">
+            <div class="card-image" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+            <div class="card-content">
+              <h3>Marketing Landing Page</h3>
+              <p>High-converting landing page with smooth animations and responsive design.</p>
+              <div class="tech-tags">
+                <span>HTML</span>
+                <span>CSS</span>
+                <span>JavaScript</span>
+              </div>
+              <div class="card-actions">
+                <a href="#" class="btn-secondary">Live</a>
+                <a href="#" class="btn-secondary">Code</a>
+              </div>
+            </div>
+          </article>
 
-            search.addEventListener('input', () => {
-                const active = document.querySelector('.filter-btn.active');
-                const filter = active ? active.dataset.filter : '*';
-                applyFilter(filter);
-            });
+          <article class="project-card" data-tags="uiux">
+            <div class="card-image" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);"></div>
+            <div class="card-content">
+              <h3>Analytics Dashboard</h3>
+              <p>Interactive dashboard UI with real-time data visualization and user-friendly controls.</p>
+              <div class="tech-tags">
+                <span>Figma</span>
+                <span>UI Design</span>
+                <span>Prototyping</span>
+              </div>
+              <div class="card-actions">
+                <a href="#" class="btn-secondary">Live</a>
+                <a href="#" class="btn-secondary">Code</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
 
-            // init
-            document.getElementById('year').textContent = new Date().getFullYear();
-        })();
-    </script>
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-section">
+        <h4>utopia developers</h4>
+        <p>Building web solutions with passion and precision.</p>
+      </div>
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="homepage.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="projects.html">Projects</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#">Documentation</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; <span id="year"></span> utopia developers. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Simple filter + search for the project grid
+    (function () {
+      const buttons = document.querySelectorAll('.filter-btn');
+      const cards = Array.from(document.querySelectorAll('.project-card'));
+      const search = document.getElementById('project-search');
+
+      function applyFilter(filter) {
+        const query = (search.value || '').trim().toLowerCase();
+        cards.forEach(card => {
+          const tags = card.getAttribute('data-tags') || '';
+          const text = (card.innerText || '').toLowerCase();
+          const matchesFilter = filter === '*' || tags.split(/\s+/).includes(filter);
+          const matchesSearch = !query || text.indexOf(query) !== -1;
+          card.style.display = (matchesFilter && matchesSearch) ? '' : 'none';
+        });
+      }
+
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          buttons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          applyFilter(btn.dataset.filter);
+        });
+      });
+
+      search.addEventListener('input', () => {
+        const active = document.querySelector('.filter-btn.active');
+        const filter = active ? active.dataset.filter : '*';
+        applyFilter(filter);
+      });
+
+      // Update year in footer
+      document.getElementById('year').textContent = new Date().getFullYear();
+    })();
+  </script>
 </body>
+</html>
 </html>

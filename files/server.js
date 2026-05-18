@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const express = require('express');
+const { json, urlencoded } = require('express');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 
@@ -20,15 +21,20 @@ connectDB(process.env.MONGODB_URI || 'mongodb://localhost:27017/utopia-developer
     process.exit(1);
   });
 
+// Allow localhost and 127.0.0.1 in development
+const allowedOrigins = process.env.CLIENT_URL 
+  ? [process.env.CLIENT_URL]
+  : ['http://localhost:5500', 'http://127.0.0.1:5500', 'http://localhost:3000', 'http://127.0.0.1:3000'];
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || '*',   // Tighten in production!
+  origin: allowedOrigins,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Admin-Key'],
   credentials: true,
 }));
 
-app.use(express.json({ limit: '10kb' }));
-app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+app.use(json({ limit: '10kb' }));
+app.use(urlencoded({ extended: true, limit: '10kb' }));
 
 // ─── Rate Limiting ───────────────────────────────────────────────────────────
 

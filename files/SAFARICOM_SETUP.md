@@ -43,8 +43,8 @@ This guide explains how to set up and use the M-Pesa payment integration in your
 Your new app dashboard will show:
 
 ```
-Consumer Key: xxxxxxxxxxxxx
-Consumer Secret: xxxxxxxxxxxxx
+Consumer Key: 7AaZq8Rd6Exk12TQVxtL55MsAHdwqYG2xal9QeEBCtCQ71f0
+Consumer Secret: vi7K5BFy1hJJmCVA5rZ8UeKxEHnU5kLRNd4jv6PVbjrO7t1ynRdeG832ebGdKFsS
 ```
 
 **Save these securely** — you'll need them in `.env`

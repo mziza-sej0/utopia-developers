@@ -1,6 +1,6 @@
-import { Router } from 'express';
-import { contactMessages } from '../db';
-import { sendContactEmail } from '../config/mailer';
+const { Router } = require('express');
+const { contactMessages } = require('../db');
+const { sendContactEmail } = require('../config/mailer');
 
 const router = Router();
 
@@ -60,4 +60,4 @@ router.get('/', async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;

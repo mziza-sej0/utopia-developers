@@ -1,4 +1,4 @@
-import { createTransport, createTestAccount, getTestMessageUrl } from 'nodemailer';
+const { createTransport, createTestAccount, getTestMessageUrl } = require('nodemailer');
 
 // ─── Transporter ─────────────────────────────────────────────────────────────
 // In development (no EMAIL_USER set) we use Ethereal for safe test delivery.
@@ -36,8 +36,8 @@ async function getTransporter() {
   return transporter;
 }
 
-const FROM = process.env.EMAIL_FROM || '"Utopia Developers" <josemongi91@gmail.com>';
-const OWNER_EMAIL = process.env.EMAIL_USER || 'josemongi91@gmail.com';
+const FROM = process.env.EMAIL_FROM || '"Utopia Developers" <noreply@utopiadevelopers.com>';
+const OWNER_EMAIL = process.env.EMAIL_USER || 'services@utopiadevelopers.com';
 
 // ─── Contact form email ───────────────────────────────────────────────────────
 async function sendContactEmail({ name, email, subject, message }) {
@@ -90,7 +90,7 @@ async function sendContactEmail({ name, email, subject, message }) {
 // ─── Password reset email ─────────────────────────────────────────────────────
 async function sendPasswordResetEmail(email, name, token) {
   const t = await getTransporter();
-  const resetUrl = `${process.env.CLIENT_URL || 'http://localhost/:3000'}/reset-password.html?token=${token}`;
+  const resetUrl = `${process.env.CLIENT_URL || 'http://localhost:3000'}/reset-password.html?token=${token}`;
 
   const info = await t.sendMail({
     from: FROM,

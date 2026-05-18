@@ -1,11 +1,11 @@
-import { Router } from 'express';
-import { hash, compare } from 'bcryptjs';
-import { sign } from 'jsonwebtoken';
-import { v4 as uuidv4 } from 'uuid';
-import { OAuth2Client } from 'google-auth-library';
-import { users, resetTokens } from '../db';
-import { authenticate } from '../middleware/auth';
-import { sendPasswordResetEmail } from '../config/mailer';
+const { Router } = require('express');
+const { hash, compare } = require('bcryptjs');
+const { sign } = require('jsonwebtoken');
+const { v4: uuidv4 } = require('uuid');
+const { OAuth2Client } = require('google-auth-library');
+const { users, resetTokens } = require('../db');
+const { authenticate } = require('../middleware/auth');
+const { sendPasswordResetEmail } = require('../config/mailer');
 
 const router = Router();
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
@@ -197,4 +197,4 @@ router.post('/logout', authenticate, (req, res) => {
   res.json({ success: true, message: 'Logged out successfully' });
 });
 
-export default router;
+module.exports = router;

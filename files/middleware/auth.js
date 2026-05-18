@@ -1,4 +1,4 @@
-import { verify } from 'jsonwebtoken';
+const { verify } = require('jsonwebtoken');
 
 /**
  * Middleware: verify JWT from Authorization: Bearer <token> header.
@@ -20,4 +20,4 @@ function authenticate(req, res, next) {
   }
 }
 
-export default { authenticate };
+module.exports = { authenticate };
