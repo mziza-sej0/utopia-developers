@@ -13,6 +13,12 @@ const paymentRoutes = require('./routes/payment');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// ─── Trust Proxy ─────────────────────────────────────────────────────────────
+// Required for express-rate-limit to work correctly behind a reverse proxy (like ngrok or Heroku)
+// This allows it to use the X-Forwarded-For header to get the real client IP.
+app.set('trust proxy', 1);
+
+
 // ─── MongoDB Connection ──────────────────────────────────────────────────────
 
 connectDB(process.env.MONGODB_URI || 'mongodb://localhost:27017/utopia-developers')
@@ -24,10 +30,16 @@ connectDB(process.env.MONGODB_URI || 'mongodb://localhost:27017/utopia-developer
 // Allow localhost and 127.0.0.1 in development
 const allowedOrigins = process.env.CLIENT_URL 
   ? [process.env.CLIENT_URL]
-  : ['http://localhost:5500', 'http://127.0.0.1:5500', 'http://localhost:3000', 'http://127.0.0.1:3000'];
+  : ['http://localhost:3000','http://127.0.0.1:3000'];
 
 app.use(cors({
-  origin: allowedOrigins,
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Admin-Key'],
   credentials: true,
@@ -35,6 +47,15 @@ app.use(cors({
 
 app.use(json({ limit: '10kb' }));
 app.use(urlencoded({ extended: true, limit: '10kb' }));
+
+// ─── Security Headers ───────────────────────────────────────────────────────
+
+app.use((req, res, next) => {
+  // Allow popups to send messages back (needed for Google Sign-In)
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+  res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+  next();
+});
 
 // ─── Rate Limiting ───────────────────────────────────────────────────────────
 
@@ -78,6 +99,12 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// ─── Root Endpoint ───────────────────────────────────────────────────────────
+
+app.get('/', (req, res) => {
+  res.json({ success: true, message: 'Welcome to the Utopia Developers API' });
+});
+
 // ─── 404 Handler ─────────────────────────────────────────────────────────────
 
 app.use((req, res) => {
@@ -93,25 +120,35 @@ app.use((err, req, res, next) => {
 
 // ─── Start ───────────────────────────────────────────────────────────────────
 
-app.listen(PORT, () => {
-  console.log(`
-  ╔══════════════════════════════════════════╗
-  ║   🚀  Utopia Developers API running      ║
-  ║   Port    : ${PORT}                          ║
-  ║   Env     : ${(process.env.NODE_ENV || 'development').padEnd(12)}              ║
-  ╚══════════════════════════════════════════╝
+if (require.main === module) {
+  const server = app.listen(PORT, () => {
+    console.log(`
+    ╔══════════════════════════════════════════╗
+    ║   🚀  Utopia Developers API running      ║
+    ║   Port    : ${PORT}                          ║
+    ║   Env     : ${(process.env.NODE_ENV || 'development').padEnd(12)}              ║
+    ╚══════════════════════════════════════════╝
+  
+    Endpoints:
+      POST  /api/auth/register
+      POST  /api/auth/login
+      POST  /api/auth/google
+      POST  /api/auth/forgot-password
+      POST  /api/auth/reset-password
+      GET   /api/auth/me         (JWT required)
+      POST  /api/auth/logout     (JWT required)
+      POST  /api/contact
+      GET   /api/health
+    `);
+  });
 
-  Endpoints:
-    POST  /api/auth/register
-    POST  /api/auth/login
-    POST  /api/auth/google
-    POST  /api/auth/forgot-password
-    POST  /api/auth/reset-password
-    GET   /api/auth/me         (JWT required)
-    POST  /api/auth/logout     (JWT required)
-    POST  /api/contact
-    GET   /api/health
-  `);
-});
+  // Graceful shutdown to release the port (especially useful with nodemon)
+  process.once('SIGUSR2', () => {
+    server.close(() => process.kill(process.pid, 'SIGUSR2'));
+  });
+  process.on('SIGINT', () => {
+    server.close(() => process.exit(0));
+  });
+}
 
 module.exports = app;

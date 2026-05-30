@@ -10,11 +10,8 @@ const { User, ResetToken, ContactMessage } = require('./models');
 // Connect to MongoDB
 const connectDB = async (mongoUri) => {
   try {
-    await mongoose.connect(mongoUri, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log('MongoDB connected');
+   await mongoose.connect('mongodb+srv://jose:200507One9.@cluster0.z1fdr08.mongodb.net/utopia-developrs');
+console.log('MongoDB connected');
   } catch (error) {
     console.error('MongoDB connection error:', error);
     process.exit(1);

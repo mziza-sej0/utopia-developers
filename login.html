@@ -74,15 +74,11 @@
         <div class="divider">or</div>
 
         <div class="social-auth">
-          <button class="social-btn" data-provider="google">
-            <span>Google</span>
-            
-          </button>
+          <div id="google-button-container"></div>
           <button class="social-btn" data-provider="github">
             <span>GitHub</span>
           </button>
         </div>
-
         <p class="auth-footer">Don't have an account? <button type="button" class="link-btn" data-switch="signup">Create one</button></p>
       </div>
 
@@ -346,7 +342,7 @@
         const response = await window.UtopiaAPI.Auth.login(email, password, remember);
         showStatus('loginStatus', `Welcome back, ${response.user.name}!`, 'success');
         setTimeout(() => {
-          window.location.href = 'index.html';
+          window.location.href = 'homepage.html';
         }, 1000);
       } catch (error) {
         showStatus('loginStatus', error.message, 'error');
@@ -403,7 +399,7 @@
         const response = await window.UtopiaAPI.Auth.register(name, email, password);
         showStatus('signupStatus', 'Account created successfully!', 'success');
         setTimeout(() => {
-          window.location.href = 'index.html';
+          window.location.href = 'homepage.html';
         }, 1000);
       } catch (error) {
         showStatus('signupStatus', error.message, 'error');
@@ -455,19 +451,26 @@
     });
 
     // Check if already logged in
-    if (window.UtopiaAPI.Auth.isLoggedIn()) {
-      const user = window.UtopiaAPI.Auth.getCurrentUser();
-      if (user) {
-        showStatus('loginStatus', `Already logged in as ${user.name}. Redirecting...`, 'success');
-        setTimeout(() => {
-          window.location.href = 'homepage.html';
-        }, 1500);
+    (async () => {
+      if (window.UtopiaAPI.Auth.isLoggedIn()) {
+        try {
+          const response = await window.UtopiaAPI.Auth.getCurrentUser();
+          if (response && response.user) {
+            showStatus('loginStatus', `Already logged in as ${response.user.name}. Redirecting...`, 'success');
+            setTimeout(() => {
+              window.location.href = 'homepage.html';
+            }, 1500);
+          }
+        } catch (error) {
+          // Token is invalid or expired, clear it and let user login
+          localStorage.removeItem('utopia_token');
+        }
       }
-    }
+    })();
 window.onload = function () {
   // Initialize Google Identity Services
   google.accounts.id.initialize({
-    client_id: "YOUR_GOOGLE_CLIENT_ID_HERE.apps.googleusercontent.com", // Replace this!
+    client_id: "515070061709-bqaud39u6j5e6fn12de0hb6s72q4isjs.apps.googleusercontent.com",
     callback: handleGoogleCredentialResponse
   });
 

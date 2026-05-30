@@ -29,5 +29,6 @@
         }
       }
     }
-  ]
+  ],
+  "liveServer.settings.port": 3001
 }

@@ -139,7 +139,6 @@
   </footer>
 
   <script src="/files/api.js"></script>
-  <script type="module" src="/files/mailer.js"></script>
   <script>
     // Set current year
     document.getElementById('year').textContent = new Date().getFullYear();
@@ -156,7 +155,7 @@
       };
 
       try {
-        const response = await fetch('http://127.0.0.1:3000/api/contact', {
+        const response = await fetch('http://localhost:3000/api/contact', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData),

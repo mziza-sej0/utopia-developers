@@ -4,8 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Projects — Utopia Developers</title>
+     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="projects.css" />
-    <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header class="site-header">
@@ -47,75 +47,77 @@
         </div>
 
         <!-- Projects Grid -->
-        <div class="projects-grid" id="projectsGrid">
-          <article class="project-card" data-tags="fullstack">
-            <div class="card-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
-            <div class="card-content">
-              <h3>Portfolio React App</h3>
-              <p>A modern, responsive portfolio website built with React and deployed on Vercel.</p>
-              <div class="tech-tags">
-                <span>React</span>
-                <span>CSS</span>
-                <span>JavaScript</span>
-              </div>
-              <div class="card-actions">
-                <a href="#" class="btn-secondary">Live</a>
-                <a href="#" class="btn-secondary">Code</a>
-              </div>
-            </div>
-          </article>
+    <div class="projects-grid" id="projectsGrid">
 
-          <article class="project-card" data-tags="backend">
-            <div class="card-image" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
-            <div class="card-content">
-              <h3>Task Manager API</h3>
-              <p>RESTful API built with Node.js and MongoDB for task management application.</p>
-              <div class="tech-tags">
-                <span>Node.js</span>
-                <span>MongoDB</span>
-                <span>Express</span>
-              </div>
-              <div class="card-actions">
-                <a href="#" class="btn-secondary">Live</a>
-                <a href="#" class="btn-secondary">Code</a>
-              </div>
-            </div>
-          </article>
+  <article class="project-card" data-tags="fullstack">
+    <div class="thumb" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 160px;"></div>
+    <div class="card-body">
+      <h3 class="project-title">Portfolio React App</h3>
+      <p class="project-desc">A modern, responsive portfolio website built with React and deployed on Vercel.</p>
+      <ul class="tech-list">
+        <li>React</li>
+        <li>CSS</li>
+        <li>JavaScript</li>
+      </ul>
+      <div class="card-actions">
+        <a href="#" class="btn">Live</a>
+        <a href="#" class="btn ghost">Code</a>
+      </div>
+    </div>
+  </article>
 
-          <article class="project-card" data-tags="frontend">
-            <div class="card-image" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
-            <div class="card-content">
-              <h3>Marketing Landing Page</h3>
-              <p>High-converting landing page with smooth animations and responsive design.</p>
-              <div class="tech-tags">
-                <span>HTML</span>
-                <span>CSS</span>
-                <span>JavaScript</span>
-              </div>
-              <div class="card-actions">
-                <a href="#" class="btn-secondary">Live</a>
-                <a href="#" class="btn-secondary">Code</a>
-              </div>
-            </div>
-          </article>
+  <article class="project-card" data-tags="backend">
+    <div class="thumb" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); min-height: 160px;"></div>
+    <div class="card-body">
+      <h3 class="project-title">Task Manager API</h3>
+      <p class="project-desc">RESTful API built with Node.js and MongoDB for task management application.</p>
+      <ul class="tech-list">
+        <li>Node.js</li>
+        <li>MongoDB</li>
+        <li>Express</li>
+      </ul>
+      <div class="card-actions">
+        <a href="#" class="btn">Live</a>
+        <a href="#" class="btn ghost">Code</a>
+      </div>
+    </div>
+  </article>
 
-          <article class="project-card" data-tags="uiux">
-            <div class="card-image" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);"></div>
-            <div class="card-content">
-              <h3>Analytics Dashboard</h3>
-              <p>Interactive dashboard UI with real-time data visualization and user-friendly controls.</p>
-              <div class="tech-tags">
-                <span>Figma</span>
-                <span>UI Design</span>
-                <span>Prototyping</span>
-              </div>
-              <div class="card-actions">
-                <a href="#" class="btn-secondary">Live</a>
-                <a href="#" class="btn-secondary">Code</a>
-              </div>
-            </div>
-          </article>
-        </div>
+  <article class="project-card" data-tags="frontend">
+    <div class="thumb" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); min-height: 160px;"></div>
+    <div class="card-body">
+      <h3 class="project-title">Marketing Landing Page</h3>
+      <p class="project-desc">High-converting landing page with smooth animations and responsive design.</p>
+      <ul class="tech-list">
+        <li>HTML</li>
+        <li>CSS</li>
+        <li>JavaScript</li>
+      </ul>
+      <div class="card-actions">
+        <a href="#" class="btn">Live</a>
+        <a href="#" class="btn ghost">Code</a>
+      </div>
+    </div>
+  </article>
+
+  <article class="project-card" data-tags="uiux">
+    <div class="thumb" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); min-height: 160px;"></div>
+    <div class="card-body">
+      <h3 class="project-title">Analytics Dashboard</h3>
+      <p class="project-desc">Interactive dashboard UI with real-time data visualization and user-friendly controls.</p>
+      <ul class="tech-list">
+        <li>Figma</li>
+        <li>UI Design</li>
+        <li>Prototyping</li>
+      </ul>
+      <div class="card-actions">
+        <a href="#" class="btn">Live</a>
+        <a href="#" class="btn ghost">Code</a>
+      </div>
+    </div>
+  </article>
+
+</div>
       </div>
     </section>
   </main>

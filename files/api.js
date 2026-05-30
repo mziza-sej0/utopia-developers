@@ -7,7 +7,7 @@
 (function () {
   'use strict';
 
-  const BASE_URL = 'http://localhost:3000/api';
+  const BASE_URL = 'http://127.0.0.1:3000/api';
   const TOKEN_KEY = 'utopia_token';
 
   // ─── Token helpers ──────────────────────────────────────────────────────────
@@ -31,16 +31,39 @@
     const token = getToken();
     if (token) headers['Authorization'] = `Bearer ${token}`;
 
-    const res = await fetch(`${BASE_URL}${path}`, {
+    const method = options.method || 'GET';
+    const fetchOptions = {
       ...options,
+      method,
       headers,
-      body: options.body ? JSON.stringify(options.body) : undefined,
-    });
+    };
 
-    const data = await res.json();
+    // Only add body if there's actual content to send
+    if (options.body) {
+      fetchOptions.body = JSON.stringify(options.body);
+    }
+
+    const res = await fetch(`${BASE_URL}${path}`, fetchOptions);
+
+    let data = {};
+    const contentType = res.headers.get('content-type');
+    
+    try {
+      if (contentType && contentType.includes('application/json')) {
+        data = await res.json();
+      } else if (res.status === 204) {
+        // No Content response
+        data = { success: true };
+      } else {
+        const text = await res.text();
+        data = text ? { error: text } : { error: `HTTP ${res.status}` };
+      }
+    } catch (parseErr) {
+      data = { error: `Failed to parse response: ${parseErr.message}` };
+    }
 
     if (!res.ok) {
-      const err = new Error(data.error || 'Request failed');
+      const err = new Error(data.error || `Request failed with status ${res.status}`);
       err.status = res.status;
       err.data = data;
       throw err;
