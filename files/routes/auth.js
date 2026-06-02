@@ -21,7 +21,8 @@ function signToken(user) {
 }
 
 function safeUser(user) {
-  const { passwordHash, ...rest } = user;
+  const u = user && user.toObject ? user.toObject() : user || {};
+  const { password, passwordHash, _id, __v, ...rest } = u;
   return rest;
 }
 
@@ -36,20 +37,20 @@ router.post('/register', async (req, res) => {
     if (password.length < 8) {
       return res.status(400).json({ success: false, error: 'Password must be at least 8 characters' });
     }
-    if (users.has(email.toLowerCase())) {
+    if (await users.has(email.toLowerCase())) {
       return res.status(409).json({ success: false, error: 'An account with this email already exists' });
     }
 
-    const passwordHash = await hash(password, 12);
+    const hashedPassword = await hash(password, 12);
     const user = {
       id: uuidv4(),
       name: name.trim(),
       email: email.toLowerCase().trim(),
-      passwordHash,
+      password: hashedPassword,
       provider: 'local',
       createdAt: new Date().toISOString(),
     };
-    users.set(user.email, user);
+    await users.set(user.email, user);
 
     const token = signToken(user);
     res.status(201).json({ success: true, token, user: safeUser(user) });
@@ -68,12 +69,12 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ success: false, error: 'Email and password are required' });
     }
 
-    const user = users.get(email.toLowerCase().trim());
+    const user = await users.get(email.toLowerCase().trim());
     if (!user || user.provider !== 'local') {
       return res.status(401).json({ success: false, error: 'Invalid email or password' });
     }
 
-    const isMatch = await compare(password, user.passwordHash);
+    const isMatch = await compare(password, user.password || user.passwordHash);
     if (!isMatch) {
       return res.status(401).json({ success: false, error: 'Invalid email or password' });
     }
@@ -101,18 +102,18 @@ router.post('/google', async (req, res) => {
     const payload = ticket.getPayload();
     const email = payload.email.toLowerCase();
 
-    let user = users.get(email);
+    let user = await users.get(email);
     if (!user) {
       user = {
         id: uuidv4(),
         name: payload.name,
         email,
-        passwordHash: null,
+        password: null,
         provider: 'google',
         avatar: payload.picture,
         createdAt: new Date().toISOString(),
       };
-      users.set(email, user);
+      user = await users.set(email, user);
     }
 
     const jwtToken = signToken(user);
@@ -132,10 +133,10 @@ router.post('/forgot-password', async (req, res) => {
     }
 
     // Always return 200 to avoid email enumeration
-    const user = users.get(email.toLowerCase().trim());
+    const user = await users.get(email.toLowerCase().trim());
     if (user && user.provider === 'local') {
       const token = uuidv4();
-      resetTokens.set(token, {
+      await resetTokens.set(token, {
         email: user.email,
         expires: Date.now() + 60 * 60 * 1000, // 1 hour
       });
@@ -160,19 +161,19 @@ router.post('/reset-password', async (req, res) => {
       return res.status(400).json({ success: false, error: 'Password must be at least 8 characters' });
     }
 
-    const record = resetTokens.get(token);
+    const record = await resetTokens.get(token);
     if (!record || record.expires < Date.now()) {
       return res.status(400).json({ success: false, error: 'Reset link is invalid or has expired' });
     }
 
-    const user = users.get(record.email);
+    const user = await users.get(record.email);
     if (!user) {
       return res.status(400).json({ success: false, error: 'User not found' });
     }
 
-    user.passwordHash = await hash(password, 12);
-    users.set(user.email, user);
-    resetTokens.delete(token);
+    user.password = await hash(password, 12);
+    await users.set(user.email, user);
+    await resetTokens.delete(token);
 
     res.json({ success: true, message: 'Password reset successfully. You can now log in.' });
   } catch (err) {
@@ -182,12 +183,17 @@ router.post('/reset-password', async (req, res) => {
 });
 
 // ─── GET /api/auth/me ────────────────────────────────────────────────────────
-router.get('/me', authenticate, (req, res) => {
-  const user = users.get(req.user.email);
-  if (!user) {
-    return res.status(404).json({ success: false, error: 'User not found' });
+router.get('/me', authenticate, async (req, res) => {
+  try {
+    const user = await users.get(req.user.email);
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'User not found' });
+    }
+    res.json({ success: true, user: safeUser(user) });
+  } catch (err) {
+    console.error('Me error:', err);
+    res.status(500).json({ success: false, error: 'Server error' });
   }
-  res.json({ success: true, user: safeUser(user) });
 });
 
 // ─── POST /api/auth/logout ───────────────────────────────────────────────────

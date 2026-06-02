@@ -3,15 +3,19 @@
  * Exposes the same interface as the in-memory store.
  * Routes don't need to change when swapping DB implementations.
  */
-
+require('dotenv').config(); // Loads the variables from the .env file
 const mongoose = require('mongoose');
 const { User, ResetToken, ContactMessage } = require('./models');
 
 // Connect to MongoDB
 const connectDB = async (mongoUri) => {
+  const uri = mongoUri || process.env.MONGODB_URI || 'mongodb://localhost:27017/utopia-developers';
   try {
-   await mongoose.connect('mongodb+srv://jose:200507One9.@cluster0.z1fdr08.mongodb.net/utopia-developrs');
-console.log('MongoDB connected');
+    await mongoose.connect(uri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log('MongoDB connected');
   } catch (error) {
     console.error('MongoDB connection error:', error);
     process.exit(1);
