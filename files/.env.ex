@@ -33,4 +33,4 @@ SAFARICOM_SECURITY_CREDENTIAL=your_security_credential
 SAFARICOM_QUEUE_URL=http://localhost:3000/api/payment/queue
 SAFARICOM_RESULT_URL=http://localhost:3000/api/payment/result
 #atlas connection string
-MONGO_URI=mongodb+srv://jose:Phbtv22hTjCLt9xS@cluster0.z1fdr08.mongodb.net/utopia-developrs
+MONGODB_URI=mongodb+srv://jose:Phbtv22hTjCLt9xS@cluster0.z1fdr08.mongodb.net/utopia-developers

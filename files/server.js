@@ -21,11 +21,7 @@ app.set('trust proxy', 1);
 
 // ─── MongoDB Connection ──────────────────────────────────────────────────────
 
-connectDB(process.env.MONGODB_URI || 'mongodb://localhost:27017/utopia-developers')
-  .catch((err) => {
-    console.error('Failed to connect to MongoDB:', err);
-    process.exit(1);
-  });
+connectDB();
 
 // Allow localhost and 127.0.0.1 in development
 const allowedOrigins = process.env.CLIENT_URL 

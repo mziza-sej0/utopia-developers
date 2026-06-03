@@ -5,29 +5,45 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Utopia Developers — Web Development Services</title>
   <link rel="stylesheet" href="styles.css" />
-
 </head>
 <body>
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-overlay" id="mobileOverlay">
+    <nav class="mobile-nav">
+      <a href="homepage.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+      <div class="mobile-auth-section">
+        <a href="login.html" class="btn btn-primary btn-block">Register</a>
+        <a href="login.html" class="btn btn-secondary btn-block">Login</a>
+      </div>
+    </nav>
+  </div>
+
   <header class="site-header">
     <div class="container header-content">
       <a class="logo-link" href="#">
         <span class="brand-text">utopia developers</span>
       </a>
+
+      <!-- Hamburger Menu Button -->
+      <button class="hamburger-menu" id="hamburgerBtn" aria-label="Toggle menu" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
+      <!-- Desktop Navigation -->
       <nav class="nav-primary" aria-label="Main navigation">
         <a href="homepage.html">Home</a>
         <a href="about.html">About</a>
         <a href="projects.html">Projects</a>
         <a href="contact.html">Contact</a>
-        
-        <a href="login.html" target="_self" rel="noopener norefferer">
-    <div class="auth-container">
-    <button class="auth-button primary">Register
-    </button>
-    <button class="auth-button secondary">login
-    </button>
-</div>
-        </a>
-    
+        <div class="auth-buttons">
+          <a href="login.html" class="btn btn-primary">Register</a>
+          <a href="login.html" class="btn btn-secondary">Login</a>
+        </div>
       </nav>
     </div>
   </header>
@@ -45,7 +61,7 @@
           </div>
         </div>
         <div class="hero-image">
-          <img src="iMAGES/utopia.jpg" alt="Utopia Developers" />
+          <img src="iMAGES/" alt="Utopia Developers" />
         </div>
       </div>
     </section>
@@ -103,7 +119,7 @@
         <div class="projects-preview">
           <article class="project-preview">
             <div class="preview-image">
-              <img src="iMAGES/project1.png" alt="Project 1" loading="lazy" />
+              <img src="images/project1.png" alt="Project 1" loading="lazy" />
             </div>
             <h3>Portfolio Website</h3>
             <p>Modern, responsive portfolio site built with React and Tailwind CSS.</p>
@@ -111,7 +127,7 @@
           </article>
           <article class="project-preview">
             <div class="preview-image">
-              <img src="iMAGES/project2.png" alt="Project 2" loading="lazy" />
+              <img src="images/project2.png" alt="Project 2" loading="lazy" />
             </div>
             <h3>E-Commerce Platform</h3>
             <p>Full-stack e-commerce solution with payments, inventory, and analytics.</p>
@@ -119,7 +135,7 @@
           </article>
           <article class="project-preview">
             <div class="preview-image">
-              <img src="iMAGES/project3.png" alt="Project 3" loading="lazy" />
+              <img src="images/project3.png" alt="Project 3" loading="lazy" />
             </div>
             <h3>SaaS Dashboard</h3>
             <p>Real-time analytics dashboard with user authentication and custom reports.</p>
@@ -160,22 +176,22 @@
       <div class="footer-section">
         <h4>Follow Us</h4>
         <div class="social-links">
-               <a href="https://www.facebook.com/joseph mongi" targer="_blank" rel="noopener norefferer">
-                    <img src="iMAGES/facebook-icon.jpeg" alt="Facebook" width="30" height="30"/>
-                    </a>
-                <a href="https://www.twitter.com/utopia developers" targer="_blank" rel="noopener norefferer">
-                    <img src="iMAGES/Twitter-icon.jpeg" alt="Twitter" width="30" height="30"/>
-                    </a>
-                <a href="https://www.linkedin.com/company/joseph-mongi" targer="_blank" rel="noopener norefferer">
-                    <img src="iMAGES/LinkedIn-icon.jpeg" alt="LinkedIn" width="30" height="30"/>
-                    </a>  
-                <a href="https://www.instagram.com/utopia developers" target="_blank" rel="noopener norefferer">
-                    <img src="iMAGES/Instagram-icon.jpeg" alt="instagram"width="30" height="30"/>
-                </a> 
-                <a href="http://www.github/mziza-sej0" target="_blank" rel="noopener norefferer">
-                    <img src="iMAGES/GitHub.jpeg" alt="GitHub" width="30" height="30"/>
-                    </a>
-                 </div>
+          <a href="https://www.facebook.com/joseph-mongi" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+            <img src="iMAGES/facebook-icon.jpeg" alt="Facebook" width="30" height="30" />
+          </a>
+          <a href="https://www.twitter.com/utopia-developers" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+            <img src="iMAGES/" alt="Twitter" width="30" height="30" />
+          </a>
+          <a href="https://www.linkedin.com/company/joseph-mongi" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+            <img src="iMAGES/linkedin-icon.jpeg" alt="LinkedIn" width="30" height="30" />
+          </a>
+          <a href="https://www.instagram.com/utopia-developers" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            <img src="iMAGES/" alt="Instagram" width="30" height="30" />
+          </a>
+          <a href="https://github.com/mziza-sej0" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+            <img src="iMAGES/" alt="GitHub" width="30" height="30" />
+          </a>
+        </div>
       </div>
     </div>
     <div class="footer-bottom">
@@ -186,6 +202,36 @@
   <script>
     // Set current year in footer
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Mobile Menu Toggle
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+    const mobileLinks = document.querySelectorAll('.mobile-overlay a');
+
+    hamburgerBtn.addEventListener('click', () => {
+      const isOpen = hamburgerBtn.getAttribute('aria-expanded') === 'true';
+      hamburgerBtn.setAttribute('aria-expanded', !isOpen);
+      mobileOverlay.classList.toggle('active');
+      document.body.style.overflow = isOpen ? 'auto' : 'hidden';
+    });
+
+    // Close overlay when clicking on a link
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        hamburgerBtn.setAttribute('aria-expanded', 'false');
+        mobileOverlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      });
+    });
+
+    // Close overlay when clicking outside (on the overlay itself)
+    mobileOverlay.addEventListener('click', (e) => {
+      if (e.target === mobileOverlay) {
+        hamburgerBtn.setAttribute('aria-expanded', 'false');
+        mobileOverlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      }
+    });
   </script>
 </body>
 </html>

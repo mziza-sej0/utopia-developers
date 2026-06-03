@@ -1,7 +1,12 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 
-const mongoUri = process.env.MONGO_URI || process.env.MONGODB_URI || 'mongodb+srv://jose:Phbtv22hTjCLt9xS@cluster0.z1fdr08.mongodb.net/utopia-developrs';
+const mongoUri = process.env.MONGODB_URI;
+
+if (!mongoUri) {
+  console.error('Error: MONGODB_URI environment variable not found in your .env file.');
+  process.exit(1);
+}
 
 console.log('\n=== MongoDB Connection Test ===\n');
 console.log('URI:', mongoUri.replace(/:[^:/@]*@/, ':***@'));

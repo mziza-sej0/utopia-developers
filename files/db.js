@@ -8,16 +8,22 @@ const mongoose = require('mongoose');
 const { User, ResetToken, ContactMessage } = require('./models');
 
 // Connect to MongoDB
-const connectDB = async (mongoUri) => {
-  const uri = mongoUri || process.env.MONGODB_URI || 'mongodb://localhost:27017/utopia-developers';
+const connectDB = async () => {
+  const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017/utopia-developers';
+  const isDefaultUri = !process.env.MONGODB_URI;
+
   try {
-    await mongoose.connect(uri, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log('MongoDB connected');
+    await mongoose.connect(uri);
+    // Use mongoose.connection.host to show where it connected, redacting credentials
+    const safeHost = uri.includes('@') ? uri.split('@')[1] : uri.split('//')[1];
+    console.log(`✓ MongoDB connected to: ${safeHost}`);
   } catch (error) {
-    console.error('MongoDB connection error:', error);
+    let errorMessage = `❌ MongoDB connection error: ${error.message}\n`;
+    if (isDefaultUri) {
+      errorMessage += 'Could not find MONGODB_URI in the .env file, falling back to the local default. ';
+    }
+    errorMessage += 'Ensure the database server is running or your environment variables are set correctly.';
+    console.error(errorMessage);
     process.exit(1);
   }
 };
@@ -139,4 +145,3 @@ module.exports = {
   resetTokens,
   contactMessages,
 };
-

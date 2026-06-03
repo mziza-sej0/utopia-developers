@@ -9,10 +9,32 @@
 </head>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <body class="login-page">
+  <header class="site-header">
+    <div class="container header-content">
+      <a class="logo-link" href="homepage.html">
+        <span class="brand-text">utopia developers</span>
+      </a>
+      
+      <!-- Hamburger Menu Button -->
+      <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle mobile menu" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
+      <nav class="nav-primary" id="mobileMenu" aria-label="Main navigation">
+        <a href="homepage.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="projects.html">Projects</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
   <div class="login-wrapper">
     <div class="login-container">
-      <!-- Logo Section -->
-      <div class="login-header">
+      <!-- Logo Section (hidden on desktop due to header) -->
+      <div class="login-header" style="display: none;">
         <a href="homepage.html" class="logo-link">
           <span class="brand-text">utopia developers</span>
         </a>
@@ -469,16 +491,24 @@
     })();
 window.onload = function () {
   // Initialize Google Identity Services
-  google.accounts.id.initialize({
-    client_id: "515070061709-bqaud39u6j5e6fn12de0hb6s72q4isjs.apps.googleusercontent.com",
-    callback: handleGoogleCredentialResponse
-  });
+  // Read client ID from a meta tag so it can be injected from server-side (.env) instead of hardcoding here
+  const googleClientId = document.querySelector('meta[name="google-client-id"]')?.content;
+  if (!googleClientId) {
+    console.warn('Google client ID not found. Add a meta tag <meta name="google-client-id" content="YOUR_CLIENT_ID"> injected from your .env.');
+  } else {
+    google.accounts.id.initialize({
+      client_id: googleClientId,
+      callback: handleGoogleCredentialResponse
+    });
 
-  // Render the button inside our container
-  google.accounts.id.renderButton(
-    document.getElementById("google-button-container"),
-    { theme: "outline", size: "large", width: "100%" } // Customize the look
-  );
+    // Render the button inside our container
+    google.accounts.id.renderButton(
+      document.getElementById("google-button-container"),
+      { theme: "outline", size: "large", width: "100%" } // Customize the look
+    );
+  }
+
+  // Note: rendering moved into initialization block above when client ID is present
 };
 
 // This function runs automatically when the user successfully clicks the Google button
@@ -515,6 +545,35 @@ async function handleGoogleCredentialResponse(response) {
     status.className = 'form-status error';
   }
 }
+
+// Mobile Menu Toggle
+const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+const mobileMenu = document.getElementById('mobileMenu');
+
+mobileMenuToggle.addEventListener('click', () => {
+  mobileMenuToggle.classList.toggle('active');
+  mobileMenu.classList.toggle('active');
+  mobileMenuToggle.setAttribute('aria-expanded', mobileMenuToggle.classList.contains('active'));
+});
+
+// Close menu when a link is clicked
+const navLinks = mobileMenu.querySelectorAll('a');
+navLinks.forEach(link => {
+  link.addEventListener('click', () => {
+    mobileMenuToggle.classList.remove('active');
+    mobileMenu.classList.remove('active');
+    mobileMenuToggle.setAttribute('aria-expanded', 'false');
+  });
+});
+
+// Close menu when clicking outside
+document.addEventListener('click', (e) => {
+  if (!mobileMenu.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
+    mobileMenuToggle.classList.remove('active');
+    mobileMenu.classList.remove('active');
+    mobileMenuToggle.setAttribute('aria-expanded', 'false');
+  }
+});
   </script>
 </body>
 </html>
