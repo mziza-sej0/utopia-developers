@@ -1,34 +1,59 @@
 const { Router } = require('express');
+const rateLimit = require('express-rate-limit');
+const validator = require('validator');
+const xss = require('xss');
 const { contactMessages } = require('../db');
 const { sendContactEmail } = require('../config/mailer');
 
 const router = Router();
 
-// ─── POST /api/contact ───────────────────────────────────────────────────────
-router.post('/', async (req, res) => {
-  try {
-    const { name, email, subject, message, subscribe } = req.body;
+// ─── Rate Limiting ──────────────────────────────────────────────────────────
+const contactLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 3, // 3 requests per minute
+  message: 'Too many contact submissions, please try again later',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
-    // Basic validation
+// ─── POST /api/contact ───────────────────────────────────────────────────────
+router.post('/', contactLimiter, async (req, res) => {
+  try {
+    let { name, email, subject, message, subscribe } = req.body;
+
+    // Basic validation with length checks
     if (!name || !email || !message) {
       return res.status(400).json({ success: false, error: 'Name, email, and message are required' });
     }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+
+    // Validate email
+    if (!validator.isEmail(email)) {
       return res.status(400).json({ success: false, error: 'Please provide a valid email address' });
     }
 
+    // Length validation to prevent abuse
+    if (name.length > 100 || message.length > 5000 || (subject && subject.length > 200)) {
+      return res.status(400).json({ success: false, error: 'Input fields exceed maximum length' });
+    }
+
     // Honeypot check (field named _hp must be empty)
-    if (req.body._hp) {
+    if (req.body._hp && req.body._hp.trim() !== '') {
       // Silently reject bots
       return res.json({ success: true });
     }
 
+    // Sanitize inputs to prevent XSS
+    name = xss(name.trim(), { whiteList: {}, stripIgnoredTag: true });
+    email = validator.trim(email.toLowerCase());
+    subject = xss((subject || '').trim(), { whiteList: {}, stripIgnoredTag: true });
+    message = xss(message.trim(), { whiteList: {}, stripIgnoredTag: true });
+
     const entry = {
       id: Date.now(),
-      name: name.trim(),
-      email: email.toLowerCase().trim(),
-      subject: (subject || '').trim(),
-      message: message.trim(),
+      name,
+      email,
+      subject,
+      message,
       subscribe: !!subscribe,
       receivedAt: new Date().toISOString(),
     };

@@ -92,10 +92,12 @@
               <label for="message">Message *</label>
               <textarea id="message" name="message" rows="6" placeholder="Tell us about your project or question" required></textarea>
             </div>
-
+            
+            
             <div class="form-row form-row-inline">
               <label class="checkbox-label">
                 <input type="checkbox" id="subscribe" name="subscribe" /> Subscribe to occasional updates
+                <script src="utopia.js"></script>
               </label>
             </div>
 
@@ -189,10 +191,12 @@
         email: document.getElementById('email').value,
         subject: document.getElementById('subject').value,
         message: document.getElementById('message').value,
+        subscribe: document.getElementById('subscribe').checked,
+        _hp: document.querySelector('input[name="_hp"]').value,
       };
 
       try {
-        const response = await fetch('http://localhost:3000/api/contact', {
+        const response = await fetch('http://localhost:3001/api/contact', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData),

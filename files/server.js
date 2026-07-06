@@ -26,7 +26,7 @@ connectDB();
 // Allow localhost and 127.0.0.1 in development
 const allowedOrigins = process.env.CLIENT_URL 
   ? [process.env.CLIENT_URL]
-  : ['http://localhost:3000','http://127.0.0.1:3000'];
+  : ['http://localhost:3001','http://127.0.0.1:3001'];
 
 app.use(cors({
   origin: function(origin, callback) {
@@ -82,7 +82,13 @@ app.use(generalLimiter);
 app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/contact', contactLimiter, contactRoutes);
 app.use('/api/payment', paymentRoutes);
-
+app.get('/api/config', (req, res) => {
+  res.json({
+    success: true,
+    googleClientId: process.env.GOOGLE_CLIENT_ID || '',
+    apiUrl: process.env.API_URL || 'http://localhost:3001',
+  });
+});
 // ─── Health Check ────────────────────────────────────────────────────────────
 
 app.get('/api/health', (req, res) => {
@@ -99,6 +105,12 @@ app.get('/api/health', (req, res) => {
 
 app.get('/', (req, res) => {
   res.json({ success: true, message: 'Welcome to the Utopia Developers API' });
+});
+
+app.get('/api/config', (req, res) => {
+  res.json({
+    googleClientId: process.env.GOOGLE_CLIENT_ID
+  });
 });
 
 // ─── 404 Handler ─────────────────────────────────────────────────────────────

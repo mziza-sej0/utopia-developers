@@ -4,10 +4,25 @@
  */
 
 const { Router } = require('express');
+const rateLimit = require('express-rate-limit');
+const validator = require('validator');
 const router = Router();
 const { initiatePayment, queryTransactionStatus, sendB2CPayment, getAccountBalance } = require('../safaricom');
 const { Payment } = require('../models');
 const { adminOnly } = require('../middleware/admin');
+
+// ─── Rate Limiters ──────────────────────────────────────────────────────────
+const paymentInitiateLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 10, // 10 requests per minute per IP
+  message: 'Too many payment attempts, please try again later',
+});
+
+const payoutLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 5, // 5 payouts per minute
+  message: 'Too many payout requests, please try again later',
+});
 
 // ─── Initiate M-Pesa Payment ────────────────────────────────────────────────
 
@@ -15,25 +30,51 @@ const { adminOnly } = require('../middleware/admin');
  * POST /api/payment/initiate
  * Initiate M-Pesa STK push payment
  */
-router.post('/initiate', async (req, res) => {
+router.post('/initiate', paymentInitiateLimiter, async (req, res) => {
   try {
-    const { phoneNumber, amount, description, reference } = req.body;
+    let { phoneNumber, amount, description, reference } = req.body;
 
     // Validate input
-    if (!phoneNumber || !amount || amount < 1) {
+    if (!phoneNumber || !amount) {
       return res.status(400).json({
         success: false,
-        error: 'Phone number and valid amount required',
+        error: 'Phone number and amount are required',
+      });
+    }
+
+    // Validate phone number format (254XXXXXXXXX)
+    phoneNumber = validator.trim(String(phoneNumber));
+    if (!/^(?:\+?254|0)[0-9]{9}$/.test(phoneNumber.replace(/\s/g, ''))) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid phone number format. Use format: 254712345678 or 0712345678',
       });
     }
 
     // Format phone number (254... format)
-    const formattedPhone = phoneNumber.startsWith('254')
-      ? phoneNumber
-      : `254${phoneNumber.slice(-9)}`;
+    let formattedPhone = phoneNumber.replace(/\s/g, '');
+    if (!formattedPhone.startsWith('254')) {
+      if (formattedPhone.startsWith('0')) {
+        formattedPhone = '254' + formattedPhone.slice(1);
+      } else {
+        formattedPhone = '254' + formattedPhone;
+      }
+    }
 
-    const referenceText = reference || 'UTOPIA-SERVICE';
-    const descriptionText = description || 'Payment to Utopia Developers';
+    // Validate amount
+    amount = parseFloat(amount);
+    if (!Number.isFinite(amount) || amount < 1 || amount > 150000) {
+      return res.status(400).json({
+        success: false,
+        error: 'Amount must be between 1 and 150000',
+      });
+    }
+
+    // Sanitize optional fields
+    reference = validator.trim(String(reference || 'UTOPIA-SERVICE')).substring(0, 32);
+    description = validator.trim(String(description || 'Payment to Utopia Developers')).substring(0, 200);
+    const referenceText = reference;
+    const descriptionText = description;
 
     // Initiate payment with Safaricom
     const result = await initiatePayment({
@@ -235,25 +276,52 @@ router.get('/transactions', adminOnly, async (req, res) => {
  * Send money to customer (admin only)
  * Usage: Refunds, bonuses, payments
  */
-router.post('/payout', adminOnly, async (req, res) => {
+router.post('/payout', adminOnly, payoutLimiter, async (req, res) => {
   try {
-    const { phoneNumber, amount, description } = req.body;
+    let { phoneNumber, amount, description } = req.body;
 
-    if (!phoneNumber || !amount || amount < 1) {
+    if (!phoneNumber || !amount) {
       return res.status(400).json({
         success: false,
-        error: 'Phone number and valid amount required',
+        error: 'Phone number and amount are required',
       });
     }
 
-    const formattedPhone = phoneNumber.startsWith('254')
-      ? phoneNumber
-      : `254${phoneNumber.slice(-9)}`;
+    // Validate phone number format
+    phoneNumber = validator.trim(String(phoneNumber));
+    if (!/^(?:\+?254|0)[0-9]{9}$/.test(phoneNumber.replace(/\s/g, ''))) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid phone number format. Use format: 254712345678 or 0712345678',
+      });
+    }
+
+    // Format phone number (254... format)
+    let formattedPhone = phoneNumber.replace(/\s/g, '');
+    if (!formattedPhone.startsWith('254')) {
+      if (formattedPhone.startsWith('0')) {
+        formattedPhone = '254' + formattedPhone.slice(1);
+      } else {
+        formattedPhone = '254' + formattedPhone;
+      }
+    }
+
+    // Validate amount
+    amount = parseFloat(amount);
+    if (!Number.isFinite(amount) || amount < 1 || amount > 150000) {
+      return res.status(400).json({
+        success: false,
+        error: 'Amount must be between 1 and 150000',
+      });
+    }
+
+    // Sanitize description
+    description = validator.trim(String(description || 'Payout from Utopia Developers')).substring(0, 200);
 
     const result = await sendB2CPayment({
       phoneNumber: formattedPhone,
       amount,
-      description: description || 'Payout from Utopia Developers',
+      description,
     });
 
     res.json({

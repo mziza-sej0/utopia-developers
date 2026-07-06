@@ -1,9 +1,9 @@
-import express from 'express';
-import request from 'supertest';
-import { compare, hash } from 'bcryptjs';
-import authRouter from './routes/auth';
-import { users, resetTokens } from '../db';
-import { sendPasswordResetEmail } from '../config/mailer';
+const express = require('express');
+const request = require('supertest');
+const { compare, hash } = require('bcryptjs');
+const authRouter = require('./routes/auth');
+const { users, resetTokens } = require('../db');
+const { sendPasswordResetEmail } = require('../config/mailer');
 
 // ─── Mock Dependencies ───────────────────────────────────────────────────────
 

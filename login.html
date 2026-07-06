@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="Login to your Utopia Developers account" />
+  <meta name="google-client-id" content="" />
   <title>Login — Utopia Developers</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -96,7 +97,10 @@
         <div class="divider">or</div>
 
         <div class="social-auth">
-          <div id="google-button-container"></div>
+          <div id="google-button-container">
+            <button class="social-btn" data-provider="google">
+              <span>Google</span>
+          </div>
           <button class="social-btn" data-provider="github">
             <span>GitHub</span>
           </button>
@@ -489,26 +493,30 @@
         }
       }
     })();
-window.onload = function () {
-  // Initialize Google Identity Services
-  // Read client ID from a meta tag so it can be injected from server-side (.env) instead of hardcoding here
-  const googleClientId = document.querySelector('meta[name="google-client-id"]')?.content;
-  if (!googleClientId) {
-    console.warn('Google client ID not found. Add a meta tag <meta name="google-client-id" content="YOUR_CLIENT_ID"> injected from your .env.');
-  } else {
+window.onload = async function () {
+  try {
+    // Fetch config from backend
+    const configResponse = await fetch('/api/config');
+    const config = await configResponse.json();
+    const googleClientId = config.googleClientId;
+
+    if (!googleClientId) {
+      console.warn('Google client ID not available');
+      return;
+    }
+
     google.accounts.id.initialize({
       client_id: googleClientId,
       callback: handleGoogleCredentialResponse
     });
 
-    // Render the button inside our container
     google.accounts.id.renderButton(
       document.getElementById("google-button-container"),
       { theme: "outline", size: "large", width: "100%" } // Customize the look
     );
+  } catch (error) {
+    console.error('Failed to load config:', error);
   }
-
-  // Note: rendering moved into initialization block above when client ID is present
 };
 
 // This function runs automatically when the user successfully clicks the Google button
@@ -519,7 +527,7 @@ async function handleGoogleCredentialResponse(response) {
 
   try {
     // Send the Google token to our Node.js backend
-    const res = await fetch('http://localhost:3000/api/auth/google', {
+    const res = await fetch('http://localhost:3001/api/auth/google', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ token: response.credential })

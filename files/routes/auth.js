@@ -1,4 +1,6 @@
 const { Router } = require('express');
+const rateLimit = require('express-rate-limit');
+const validator = require('validator');
 const { hash, compare } = require('bcryptjs');
 const { sign } = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
@@ -9,6 +11,31 @@ const { sendPasswordResetEmail } = require('../config/mailer');
 
 const router = Router();
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+// ─── Rate Limiters ──────────────────────────────────────────────────────────
+const registerLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // 5 requests per 15 minutes
+  message: 'Too many registration attempts, please try again later',
+  skip: (req) => !req.body.email, // Skip if no email in request
+  keyGenerator: (req) => req.body.email || req.ip, // Use email as key
+});
+
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // 5 failed attempts per 15 minutes
+  message: 'Too many login attempts, please try again later',
+  skip: (req) => !req.body.email,
+  keyGenerator: (req) => req.body.email || req.ip,
+});
+
+const forgotPasswordLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 3, // 3 requests per hour
+  message: 'Too many password reset requests, please try again later',
+  skip: (req) => !req.body.email,
+  keyGenerator: (req) => req.body.email || req.ip,
+});
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -27,25 +54,41 @@ function safeUser(user) {
 }
 
 // ─── POST /api/auth/register ─────────────────────────────────────────────────
-router.post('/register', async (req, res) => {
+router.post('/register', registerLimiter, async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    let { name, email, password } = req.body;
 
+    // Validation
     if (!name || !email || !password) {
       return res.status(400).json({ success: false, error: 'Name, email and password are required' });
     }
-    if (password.length < 8) {
-      return res.status(400).json({ success: false, error: 'Password must be at least 8 characters' });
+
+    // Sanitize and validate inputs
+    name = validator.trim(name);
+    email = validator.trim(email.toLowerCase());
+
+    // Length checks
+    if (name.length < 2 || name.length > 100) {
+      return res.status(400).json({ success: false, error: 'Name must be between 2 and 100 characters' });
     }
-    if (await users.has(email.toLowerCase())) {
+
+    if (!validator.isEmail(email)) {
+      return res.status(400).json({ success: false, error: 'Please provide a valid email address' });
+    }
+
+    if (password.length < 8 || password.length > 128) {
+      return res.status(400).json({ success: false, error: 'Password must be between 8 and 128 characters' });
+    }
+
+    if (await users.has(email)) {
       return res.status(409).json({ success: false, error: 'An account with this email already exists' });
     }
 
     const hashedPassword = await hash(password, 12);
     const user = {
       id: uuidv4(),
-      name: name.trim(),
-      email: email.toLowerCase().trim(),
+      name,
+      email,
       password: hashedPassword,
       provider: 'local',
       createdAt: new Date().toISOString(),
@@ -61,15 +104,21 @@ router.post('/register', async (req, res) => {
 });
 
 // ─── POST /api/auth/login ────────────────────────────────────────────────────
-router.post('/login', async (req, res) => {
+router.post('/login', loginLimiter, async (req, res) => {
   try {
-    const { email, password } = req.body;
+    let { email, password } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({ success: false, error: 'Email and password are required' });
     }
 
-    const user = await users.get(email.toLowerCase().trim());
+    // Sanitize inputs
+    email = validator.trim(email.toLowerCase());
+    if (!validator.isEmail(email)) {
+      return res.status(400).json({ success: false, error: 'Invalid email format' });
+    }
+
+    const user = await users.get(email);
     if (!user || user.provider !== 'local') {
       return res.status(401).json({ success: false, error: 'Invalid email or password' });
     }
@@ -95,22 +144,29 @@ router.post('/google', async (req, res) => {
       return res.status(400).json({ success: false, error: 'Google token is required' });
     }
 
+    // Validate token format
+    token = validator.trim(String(token));
+    if (token.length < 10 || token.length > 2000) {
+      return res.status(400).json({ success: false, error: 'Invalid token' });
+    }
+
     const ticket = await googleClient.verifyIdToken({
       idToken: token,
       audience: process.env.GOOGLE_CLIENT_ID,
     });
     const payload = ticket.getPayload();
-    const email = payload.email.toLowerCase();
+    const email = validator.normalizeEmail(payload.email);
 
     let user = await users.get(email);
     if (!user) {
+      const name = validator.trim(String(payload.name || 'User')).substring(0, 100);
       user = {
         id: uuidv4(),
-        name: payload.name,
+        name,
         email,
         password: null,
         provider: 'google',
-        avatar: payload.picture,
+        avatar: validator.isURL(payload.picture) ? payload.picture : null,
         createdAt: new Date().toISOString(),
       };
       user = await users.set(email, user);
@@ -125,15 +181,21 @@ router.post('/google', async (req, res) => {
 });
 
 // ─── POST /api/auth/forgot-password ─────────────────────────────────────────
-router.post('/forgot-password', async (req, res) => {
+router.post('/forgot-password', forgotPasswordLimiter, async (req, res) => {
   try {
-    const { email } = req.body;
+    let { email } = req.body;
     if (!email) {
       return res.status(400).json({ success: false, error: 'Email is required' });
     }
 
+    // Sanitize email
+    email = validator.trim(email.toLowerCase());
+    if (!validator.isEmail(email)) {
+      return res.status(400).json({ success: false, error: 'Invalid email format' });
+    }
+
     // Always return 200 to avoid email enumeration
-    const user = await users.get(email.toLowerCase().trim());
+    const user = await users.get(email);
     if (user && user.provider === 'local') {
       const token = uuidv4();
       await resetTokens.set(token, {
@@ -153,12 +215,20 @@ router.post('/forgot-password', async (req, res) => {
 // ─── POST /api/auth/reset-password ──────────────────────────────────────────
 router.post('/reset-password', async (req, res) => {
   try {
-    const { token, password } = req.body;
+    let { token, password } = req.body;
     if (!token || !password) {
       return res.status(400).json({ success: false, error: 'Token and new password are required' });
     }
-    if (password.length < 8) {
-      return res.status(400).json({ success: false, error: 'Password must be at least 8 characters' });
+
+    // Validate token format (UUID)
+    token = validator.trim(token);
+    if (!validator.isUUID(token)) {
+      return res.status(400).json({ success: false, error: 'Invalid or malformed reset token' });
+    }
+
+    // Validate password length
+    if (password.length < 8 || password.length > 128) {
+      return res.status(400).json({ success: false, error: 'Password must be between 8 and 128 characters' });
     }
 
     const record = await resetTokens.get(token);

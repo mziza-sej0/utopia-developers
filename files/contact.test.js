@@ -1,8 +1,8 @@
-import express from 'express';
-import request from 'supertest';
-import contactRouter from './contact';
-import { contactMessages } from '../db';
-import { sendContactEmail } from '../config/mailer';
+const express = require('express');
+const request = require('supertest');
+const contactRouter = require('./contact');
+const { contactMessages } = require('../db');
+const { sendContactEmail } = require('../config/mailer');
 
 // Mock dependencies
 jest.mock('../db', () => ({

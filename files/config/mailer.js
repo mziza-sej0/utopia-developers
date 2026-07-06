@@ -1,15 +1,16 @@
 const { createTransport, createTestAccount, getTestMessageUrl } = require('nodemailer');
 
 // ─── Transporter ─────────────────────────────────────────────────────────────
-// In development (no EMAIL_USER set) we use Ethereal for safe test delivery.
-// In production set EMAIL_HOST / EMAIL_USER / EMAIL_PASS in your .env.
+// If EMAIL_USER is set, uses real SMTP (Gmail/Mailgun/etc) for production.
+// If not set, falls back to Ethereal test account for safe development.
 
 let transporter;
+let isTestAccount = false;
 
 async function getTransporter() {
   if (transporter) return transporter;
 
-  if (process.env.EMAIL_USER) {
+  if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
     transporter = createTransport({
       host: process.env.EMAIL_HOST || 'smtp.gmail.com',
       port: parseInt(process.env.EMAIL_PORT || '587'),
@@ -19,6 +20,8 @@ async function getTransporter() {
         pass: process.env.EMAIL_PASS,
       },
     });
+    isTestAccount = false;
+    console.log('✅ Using real email service:', process.env.EMAIL_USER);
   } else {
     // Ethereal test account — preview URLs logged to console
     const testAccount = await createTestAccount();
@@ -30,14 +33,15 @@ async function getTransporter() {
         pass: testAccount.pass,
       },
     });
-    console.log('📧  No EMAIL_USER set — using Ethereal test account:', testAccount.user);
+    isTestAccount = true;
+    console.log('⚠️  No EMAIL_USER/EMAIL_PASS set — using Ethereal test account:', testAccount.user);
   }
 
   return transporter;
 }
 
-const FROM = process.env.EMAIL_FROM || '"Utopia Developers" <noreply@utopiadevelopers.com>';
-const OWNER_EMAIL = process.env.EMAIL_USER || 'services@utopiadevelopers.com';
+const FROM = process.env.EMAIL_FROM || '"Utopia Developers" <josemongi91@gmail.com>';
+const OWNER_EMAIL = process.env.EMAIL_USER || 'josemongi91@gmail.com';
 
 // ─── Contact form email ───────────────────────────────────────────────────────
 async function sendContactEmail({ name, email, subject, message }) {
@@ -62,7 +66,12 @@ async function sendContactEmail({ name, email, subject, message }) {
       </div>
     `,
   });
-  console.log('Owner notification sent. Preview:', getTestMessageUrl(ownerInfo));
+  
+  if (isTestAccount) {
+    console.log('📧 Test contact email — Preview:', getTestMessageUrl(ownerInfo));
+  } else {
+    console.log('✅ Contact notification sent to:', OWNER_EMAIL);
+  }
 
   // Auto-reply to sender
   const replyInfo = await t.sendMail({
@@ -84,13 +93,18 @@ async function sendContactEmail({ name, email, subject, message }) {
       </div>
     `,
   });
-  console.log('Auto-reply sent. Preview:', getTestMessageUrl(replyInfo));
+  
+  if (isTestAccount) {
+    console.log('📧 Test auto-reply — Preview:', getTestMessageUrl(replyInfo));
+  } else {
+    console.log('✅ Auto-reply sent to:', email);
+  }
 }
 
 // ─── Password reset email ─────────────────────────────────────────────────────
 async function sendPasswordResetEmail(email, name, token) {
   const t = await getTransporter();
-  const resetUrl = `${process.env.CLIENT_URL || 'http://localhost:3000'}/reset-password.html?token=${token}`;
+  const resetUrl = `${process.env.CLIENT_URL || 'http://localhost:3001'}/reset-password.html?token=${token}`;
 
   const info = await t.sendMail({
     from: FROM,
@@ -111,7 +125,12 @@ async function sendPasswordResetEmail(email, name, token) {
       </div>
     `,
   });
-  console.log('Password reset email sent. Preview:', getTestMessageUrl(info));
+  
+  if (isTestAccount) {
+    console.log('📧 Test password reset email — Preview:', getTestMessageUrl(info));
+  } else {
+    console.log('✅ Password reset email sent to:', email);
+  }
 }
 
 module.exports = { sendContactEmail, sendPasswordResetEmail };
